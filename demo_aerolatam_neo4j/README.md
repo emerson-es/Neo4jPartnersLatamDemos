@@ -130,4 +130,68 @@ RETURN a.aeroportoNome AS aeroporto, a.aeroportoICAO AS icao,
 
 ---
 
-## 📁 D
+## 📁 Documentação
+
+| Arquivo | Descrição |
+|---------|-----------|
+| [`Neo4j_PreVenda_Aerolatam.docx`](./Neo4j_PreVenda_Aerolatam.docx) | Documento completo de pré-venda com modelo de dados, casos de uso, scripts comentados, queries de demo e comparativo Neo4j vs SQL |
+
+O documento inclui:
+- ✅ Inventário completo do modelo de dados (nós, relacionamentos, propriedades)
+- ✅ Texto explicativo para audiência não-técnica
+- ✅ 4 scripts Cypher reutilizáveis e parametrizados
+- ✅ 6 consultas prontas para demonstração ao vivo
+- ✅ Tabela comparativa Neo4j vs SQL para argumentação em pré-venda
+
+---
+
+## 🏆 Top Hubs da Rede — Exemplo de Saída
+
+| Aeroporto          | ICAO | Betweenness | Cluster          |
+|--------------------|------|-------------|------------------|
+| Guarulhos          | SBGR | 12.544      | Brasil (206)     |
+| Santiago           | SCEL | 7.615       | Chile (508)      |
+| Lima Jorge Chávez  | SPJC | 7.584       | Peru (498)       |
+| Bogotá El Dorado   | SKBO | 4.416       | Colombia/EUA (609)|
+| Miami              | KMIA | 3.818       | Colombia/EUA (609)|
+
+---
+
+## 📌 Empresas Aéreas no Modelo
+
+| Empresa               | ICAO |
+|-----------------------|------|
+| LATAM Brasil          | TAM  |
+| LATAM Airlines        | LAN  |
+| LATAM Colombia        | ARE  |
+| LATAM Chile           | LXP  |
+| LATAM Peru            | LPE  |
+| LATAM Paraguay        | LAP  |
+| LATAM Ecuador         | LNE  |
+| LATAM Cargo           | LCO  |
+| LATAM Cargo Brasil    | LTG  |
+| LATAM Cargo Colombia  | LAE  |
+
+---
+
+## ⚖️ Neo4j vs. SQL para Aviação — Resumo
+
+| Capacidade                  | SQL Relacional                          | Neo4j                                           |
+|-----------------------------|-----------------------------------------|-------------------------------------------------|
+| Caminho mínimo com N escalas| 5+ JOINs, lento, complexo               | shortestPath() — 1 linha, milissegundos         |
+| Centralidade de nós         | Não suportado nativamente               | Algoritmos GDS pré-computados                   |
+| Detecção de comunidades     | Não disponível                          | Louvain, Label Propagation via GDS              |
+| Consultas de vizinhança     | JOIN para cada nível de profundidade    | Padrão *..N — qualquer profundidade             |
+| Análise de impacto          | Simulações complexas em SQL             | Remove nó e recalcula caminhos em tempo real    |
+| Visualização nativa         | Requer ferramentas externas             | Neo4j Browser e Bloom inclusos                  |
+
+---
+
+## 🛠️ Tecnologias
+
+- **Neo4j** — banco de dados de grafo
+- **Cypher** — linguagem de consulta
+- **Neo4j GDS** (Graph Data Science) — algoritmos de centralidade e comunidade
+- **Neo4j Browser / Bloom** — visualização interativa
+
+---
