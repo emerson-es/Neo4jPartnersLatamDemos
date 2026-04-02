@@ -126,7 +126,7 @@ ORDER BY fundos_auditados DESC
 
 | Arquivo | Descrição |
 |---------|-----------|
-| [`Neo4j_PreVenda_Financeiro.docx`](./Neo4j_PreVenda_Financeiro.docx) | Documento completo de pré-venda com modelo de dados, casos de uso, scripts comentados, queries de demo e comparativo Neo4j vs SQL para o mercado financeiro |
+| [`Neo4j_PreVenda_Financeiro.pdf`](./Neo4j_PreVenda_Financeiro.pdf) | Documento completo de pré-venda com modelo de dados, casos de uso, scripts comentados, queries de demo e comparativo Neo4j vs SQL para o mercado financeiro |
 
 O documento inclui:
 - ✅ Inventário completo do modelo de dados (nós, relacionamentos, propriedades)
