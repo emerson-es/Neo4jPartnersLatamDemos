@@ -1,0 +1,1094 @@
+{
+  "version": 2,
+  "title": "FSI 360 - Demo",
+  "description": "Visão 360 de clientes e suas transações.",
+  "pages": [
+    {
+      "id": "0",
+      "version": 1,
+      "title": "Cockpit - Visão 360",
+      "widgets": [
+        {
+          "version": 1,
+          "title": "Portifólio de Produtos",
+          "w": 4,
+          "h": 3,
+          "x": 2,
+          "y": 0,
+          "meta": {
+            "latestCypherQueries": [
+              {
+                "query": "MATCH (pt:ProductType)<-[:HAS_TYPE]-(p:Product)<-[:OF_PRODUCT]-(t:Transaction)<-[:FROM]-(c:Consumer) WHERE c.consumer_id = $consumer_consumer_id RETURN pt.product_type_name AS productType, count(t) AS transactionCount ORDER BY transactionCount DESC LIMIT 10",
+                "origin": "user"
+              },
+              {
+                "query": "MATCH (pt:ProductType)<-[:HAS_TYPE]-(p:Product)<-[:OF_PRODUCT]-(t:Transaction) RETURN pt.product_type_name AS productType, count(t) AS transactionCount ORDER BY transactionCount DESC LIMIT 10",
+                "origin": "user"
+              }
+            ]
+          },
+          "settings": {
+            "type": "table",
+            "query": "MATCH (pt:ProductType)<-[:HAS_TYPE]-(p:Product)<-[:OF_PRODUCT]-(t:Transaction)<-[:FROM]-(c:Consumer) WHERE c.consumer_id = $consumer_consumer_id RETURN pt.product_type_name AS productType, count(t) AS transactionCount ORDER BY transactionCount DESC LIMIT 10",
+            "databaseName": "fsi360",
+            "actions": [],
+            "version": 1,
+            "richRenderCells": false,
+            "enableRecordsDownload": true
+          }
+        },
+        {
+          "version": 1,
+          "title": "Total de Transações",
+          "w": 2,
+          "h": 2,
+          "x": 0,
+          "y": 1,
+          "meta": {
+            "latestCypherQueries": [
+              {
+                "query": "/* total de transações do consumer\n */\n\nMATCH (c:Consumer)-[:FROM]->(t:Transaction) where c.consumer_id = $consumer_consumer_id\nRETURN count(t) AS total_transactions",
+                "origin": "user"
+              },
+              {
+                "query": "/* total de transações do consumer\n */\n\nMATCH (c:Consumer)-[:TO]->(t:Transaction) where c.consumer_id = $consumer_consumer_id\nRETURN count(t) AS total_transactions",
+                "origin": "user"
+              },
+              {
+                "query": "/* total de transaçõe do consumer\n */\n\nMATCH (c:Consumer)-[:FROM]->(t:Transaction) where c.consumer_id = $consumer_consumer_id\nRETURN count(t) AS total_transactions",
+                "origin": "user"
+              },
+              {
+                "query": "/* total de transaçõe do consumer\n */\n\nMATCH (c:Consumer)-[:FROM]->(t:Transaction)\nRETURN c.consumer_id, count(t) AS total_transactions",
+                "origin": "llm"
+              }
+            ],
+            "latestNaturalLanguagePrompts": [
+              {
+                "query": "total de transaçõe do consumer"
+              }
+            ]
+          },
+          "settings": {
+            "type": "singleValue",
+            "query": "/* total de transações do consumer\n */\n\nMATCH (c:Consumer)-[:FROM]->(t:Transaction) where c.consumer_id = $consumer_consumer_id\nRETURN count(t) AS total_transactions",
+            "databaseName": "fsi360",
+            "version": 1,
+            "fontSize": 48,
+            "textColor": "#0052fa",
+            "align": 5
+          }
+        },
+        {
+          "version": 1,
+          "title": "Últimas 4 Interações",
+          "w": 4,
+          "h": 4,
+          "x": 8,
+          "y": 5,          "meta": {
+            "latestCypherQueries": [
+              {
+                "query": "/* Last 4 events\n */\n\nMATCH p = (c:Consumer)-[:LAST]->(e)<-[:NEXT*1..3]-(d) WHERE c.consumer_id = $consumer_consumer_id\nRETURN c,e,d ,p",
+                "origin": "user"
+              },
+              {
+                "query": "/* Last 3 events\n */\n\nMATCH p = (c:Consumer)-[:LAST]->(e)<-[:NEXT*1..3]-(d) WHERE c.consumer_id = $consumer_consumer_id\nRETURN c,e,d",
+                "origin": "user"
+              },
+              {
+                "query": "/* Last 3 events\n */\n\nMATCH p = (c:Consumer)-[:LAST]->(e)<-[:NEXT*1..2]-(d) WHERE c.consumer_id = $consumer_consumer_id\nRETURN c,e,d",
+                "origin": "user"
+              },
+              {
+                "query": "/* Last 3 events\n */\n\nMATCH p = (c:Consumer)-[:LAST]->(e)<-[:NEXT*1..2]-(d) WHERE c.consumer_id = $consumer_consumer_id\nRETURN p",
+                "origin": "user"
+              },
+              {
+                "query": "/* Last 3 events\n */\n\nMATCH p = (c:Consumer)-[:LAST]->()<-[:NEXT*1..2]-() WHERE c.consumer_id = $consumer_consumer_id\nRETURN p",
+                "origin": "user"
+              }
+            ],
+            "latestNaturalLanguagePrompts": [
+              {
+                "query": "Last 3 events"
+              }
+            ]
+          },
+          "settings": {
+            "type": "graph",
+            "query": "/* Last 4 events\n */\n\nMATCH p = (c:Consumer)-[:LAST]->(e)<-[:NEXT*1..3]-(d) WHERE c.consumer_id = $consumer_consumer_id\nRETURN c,e,d ,p",
+            "databaseName": "fsi360",
+            "version": 2,
+            "enableSidePanel": true,
+            "enableContextMenu": true,
+            "layout": {
+              "type": "hierarchical",
+              "options": {
+                "direction": "right"
+              }
+            },
+            "enableDownloadImage": true
+          }
+        },
+        {
+          "version": 1,
+          "title": "Valor Movimentado",
+          "w": 2,
+          "h": 2,
+          "x": 0,
+          "y": 3,
+          "meta": {
+            "latestCypherQueries": [
+              {
+                "query": "/* total de transações do consumer\n */\n\nMATCH (c:Consumer)-[:FROM]->(t:Transaction) where c.consumer_id = $consumer_consumer_id\nRETURN sum(t.paid_total_value) as total_transactions_value",
+                "origin": "user"
+              },
+              {
+                "query": "/* total de transações do consumer\n */\n\nMATCH (c:Consumer)-[:FROM]->(t:Transaction) where c.consumer_id = $consumer_consumer_id\nRETURN sum(t.paid_total_value) , count(t) AS total_transactions",
+                "origin": "user"
+              },
+              {
+                "query": "/* total de transações do consumer\n */\n\nMATCH (c:Consumer)-[:FROM]->(t:Transaction) where c.consumer_id = $consumer_consumer_id\nRETURN count(t) AS total_transactions",
+                "origin": "user"
+              },
+              {
+                "query": "/* total de transações do consumer\n */\n\nMATCH (c:Consumer)-[:TO]->(t:Transaction) where c.consumer_id = $consumer_consumer_id\nRETURN count(t) AS total_transactions",
+                "origin": "user"
+              },
+              {
+                "query": "/* total de transaçõe do consumer\n */\n\nMATCH (c:Consumer)-[:FROM]->(t:Transaction) where c.consumer_id = $consumer_consumer_id\nRETURN count(t) AS total_transactions",
+                "origin": "user"
+              }
+            ],
+            "latestNaturalLanguagePrompts": [
+              {
+                "query": "total de transaçõe do consumer"
+              }
+            ]
+          },
+          "settings": {
+            "type": "singleValue",
+            "query": "/* total de transações do consumer\n */\n\nMATCH (c:Consumer)-[:FROM]->(t:Transaction) where c.consumer_id = $consumer_consumer_id\nRETURN sum(t.paid_total_value) as total_transactions_value",
+            "databaseName": "fsi360",
+            "version": 1,
+            "fontSize": 48,
+            "textColor": "#0052fa",
+            "align": 5
+          }
+        },
+        {
+          "version": 1,
+          "title": "Últimos Chamados",
+          "w": 6,
+          "h": 4,
+          "x": 0,
+          "y": 5,
+          "meta": {
+            "latestCypherQueries": [
+              {
+                "query": "MATCH (c:Consumer)-[:OPENED_TICKET]->(st:SupportTicket) WHERE c.consumer_id = $consumer_consumer_id RETURN c.consumer_id AS ConsumerID, c.email_domain AS EmailDomain, st.ticket_id AS TicketID, st.severity AS Severity, st.topic AS Topic, st.resolved_at AS ResolvedAt ORDER BY st.resolved_at DESC LIMIT 20",
+                "origin": "user"
+              },
+              {
+                "query": "MATCH (c:Consumer)-[:OPENED_TICKET]->(st:SupportTicket) WHERE st.is_problematic_case = true  and c.consumer_id = $consumer_consumer_id RETURN c.consumer_id AS ConsumerID, c.email_domain AS EmailDomain, st.ticket_id AS TicketID, st.severity AS Severity, st.topic AS Topic, st.resolved_at AS ResolvedAt ORDER BY st.resolved_at DESC LIMIT 20",
+                "origin": "user"
+              },
+              {
+                "query": "MATCH (c:Consumer)-[:OPENED_TICKET]->(st:SupportTicket) WHERE st.is_problematic_case = true RETURN c.consumer_id AS ConsumerID, c.email_domain AS EmailDomain, st.ticket_id AS TicketID, st.severity AS Severity, st.topic AS Topic, st.resolved_at AS ResolvedAt ORDER BY st.resolved_at DESC LIMIT 20",
+                "origin": "user"
+              }
+            ]
+          },
+          "settings": {
+            "type": "table",
+            "query": "MATCH (c:Consumer)-[:OPENED_TICKET]->(st:SupportTicket) WHERE c.consumer_id = $consumer_consumer_id RETURN c.consumer_id AS ConsumerID, c.email_domain AS EmailDomain, st.ticket_id AS TicketID, st.severity AS Severity, st.topic AS Topic, st.resolved_at AS ResolvedAt ORDER BY st.resolved_at DESC LIMIT 20",
+            "databaseName": "fsi360",
+            "actions": [],
+            "version": 1,
+            "richRenderCells": false,
+            "enableRecordsDownload": true
+          }
+        },
+        {
+          "version": 1,
+          "title": "Movimentações",
+          "w": 4,
+          "h": 2,
+          "x": 2,
+          "y": 3,
+          "meta": {
+            "latestCypherQueries": [
+              {
+                "query": "MATCH (c:Consumer)-[:FROM]->(t:Transaction)-[:TRANSACTION_DATE]->(d:Date) where c.consumer_id = $consumer_consumer_id RETURN d.date AS transactionDate, sum(t.paid_total_value) AS valorMovimentado ORDER BY transactionDate",
+                "origin": "user"
+              },
+              {
+                "query": "MATCH (c:Consumer)-[:FROM]->(t:Transaction)-[:TRANSACTION_DATE]->(d:Date) where c.consumer_id = $consumer_consumer_id RETURN d.date AS transactionDate, sum(t.paid_total_value) AS transactionCount ORDER BY transactionDate",
+                "origin": "user"
+              },
+              {
+                "query": "MATCH (c:Consumer)-[:FROM]->(t:Transaction)-[:TRANSACTION_DATE]->(d:Date) where c.consumer_id = $consumer_consumer_id RETURN d.date AS transactionDate, count(t) AS transactionCount ORDER BY transactionDate",
+                "origin": "user"
+              },
+              {
+                "query": "MATCH (t:Transaction)-[:TRANSACTION_DATE]->(d:Date) RETURN d.date AS transactionDate, count(t) AS transactionCount ORDER BY transactionDate",
+                "origin": "user"
+              }
+            ]
+          },
+          "settings": {
+            "type": "bar",
+            "query": "MATCH (c:Consumer)-[:FROM]->(t:Transaction)-[:TRANSACTION_DATE]->(d:Date) where c.consumer_id = $consumer_consumer_id RETURN d.date AS transactionDate, sum(t.paid_total_value) AS valorMovimentado ORDER BY transactionDate",
+            "databaseName": "fsi360",
+            "valueKeys": [],
+            "orientation": "vertical",
+            "scaleType": "linear",
+            "showLegend": false,
+            "showDataZoom": "auto",
+            "version": 1,
+            "barArrangement": "grouped",
+            "enableDownloadImage": true
+          }
+        },
+        {
+          "version": 1,
+          "title": "Visão 360",
+          "w": 6,
+          "h": 5,
+          "x": 6,
+          "y": 0,
+          "meta": {
+            "latestCypherQueries": [
+              {
+                "query": "/* Display the consumer nodes, support ticket nodes, and transaction nodes, along with their opened ticket relationships and from relationships. */\n\nMATCH p= (c:Consumer {consumer_id:$consumer_consumer_id})-[*1..1]->()\nRETURN p",
+                "origin": "user"
+              },
+              {
+                "query": "/* Display the consumer nodes, support ticket nodes, and transaction nodes, along with their opened ticket relationships and from relationships. */\n\nMATCH p= (c:Consumer {consumer_id:$consumer_consumer_id})-[*1..2]->()\nRETURN p",
+                "origin": "user"
+              },
+              {
+                "query": "/* Display the consumer nodes, support ticket nodes, and transaction nodes, along with their opened ticket relationships and from relationships. */\n\nMATCH p= (c:Consumer)-[*1..2]->()\nRETURN p",
+                "origin": "user"
+              },
+              {
+                "query": "/* Display the consumer nodes, support ticket nodes, and transaction nodes, along with their opened ticket relationships and from relationships. */\n\nMATCH (c:Consumer)-[ot:OPENED_TICKET]->(st:SupportTicket),       (c)-[fr:FROM]->(t:Transaction)\nRETURN c, ot, st, t, fr",
+                "origin": "llm"
+              },
+              {
+                "query": "/* Show the consumer nodes, their associated device nodes, and email nodes, connected by has device relationships and has email relationships. */\n\nMATCH (c:Consumer)-[hd:HAS_DEVICE]->(d:Device),       (c)-[he:HAS_EMAIL]->(e:Email)\nRETURN c, d, e",
+                "origin": "llm"
+              }
+            ],
+            "latestNaturalLanguagePrompts": [
+              {
+                "query": "Display the consumer nodes, support ticket nodes, and transaction nodes, along with their opened ticket relationships and from relationships."
+              },
+              {
+                "query": "Show the consumer nodes, their associated device nodes, and email nodes, connected by has device relationships and has email relationships."
+              },
+              {
+                "query": "Explore the consumer nodes, other consumer nodes they have similar journey relationships with, and product nodes they uses product relationships with."
+              },
+              {
+                "query": "Visão 360 do consumer"
+              }
+            ]
+          },
+          "settings": {
+            "type": "graph",
+            "query": "/* Visão 360*/\n\nMATCH p= (c:Consumer {consumer_id:$consumer_consumer_id})-[*1..1]->()\nRETURN p",
+            "databaseName": "fsi360",
+            "version": 2,
+            "enableSidePanel": true,
+            "enableContextMenu": true,
+            "layout": {
+              "type": "d3Force"
+            },
+            "enableDownloadImage": true
+          }
+        },
+        {
+          "version": 1,
+          "title": "Selecione o Consumer",
+          "w": 2,
+          "h": 1,
+          "x": 0,
+          "y": 0,
+          "meta": {},
+          "settings": {
+            "version": 1,
+            "type": "filter",
+            "databaseName": "fsi360",
+            "entityType": "node",
+            "entityLabel": "Consumer",
+            "entityPropertyKey": "consumer_id",
+            "parameterName": "consumer_consumer_id",
+            "enableTimeZone": false,
+            "numberType": "Integer"
+          }
+        },
+        {
+          "version": 1,
+          "title": "Clientes - Similares",
+          "w": 2,
+          "h": 4,
+          "x": 6,
+          "y": 5,
+          "meta": {
+            "latestCypherQueries": [
+              {
+                "query": "/* Cliente similares\n */\n\nMATCH (c:Consumer)-[s:SIMILAR_JOURNEY]-(c2:Consumer) WHERE c.consumer_id = $consumer_consumer_id\nRETURN c2.consumer_id AS similar_consumer_id, round(s.similarity_score,2) AS similarity_score",
+                "origin": "user"
+              },
+              {
+                "query": "/* Cliente similares\n */\n\nMATCH (c:Consumer)-[s:SIMILAR_JOURNEY]-(c2:Consumer) WHERE c.consumer_id = $consumer_consumer_id\nRETURN c2.consumer_id AS similar_consumer_id, s.similarity_score AS similarity_score",
+                "origin": "user"
+              },
+              {
+                "query": "/* Cliente similares\n */\n\nMATCH (c:Consumer)-[s:SIMILAR_JOURNEY]-(c2:Consumer) WHERE c.consumer_id = $consumer_consumer_id\nRETURN c.consumer_id AS consumer_id, c2.consumer_id AS similar_consumer_id,c2, s.similarity_score AS similarity_score",
+                "origin": "user"
+              },
+              {
+                "query": "/* Cliente similares\n */\n\nMATCH (c:Consumer)-[s:SIMILAR_JOURNEY]-(c2:Consumer) WHERE c.consumer_id = $consumer_consumer_id\nRETURN c.consumer_id AS consumer_id, c2.consumer_id AS similar_consumer_id,c2 s.similarity_score AS similarity_score",
+                "origin": "user"
+              },
+              {
+                "query": "/* Cliente similares\n */\n\nMATCH (c:Consumer)-[s:SIMILAR_JOURNEY]-(c2:Consumer) WHERE c.consumer_id = $consumer_consumer_id\nRETURN c.consumer_id AS consumer_id, c2.consumer_id AS similar_consumer_id, s.similarity_score AS similarity_score",
+                "origin": "user"
+              }
+            ],
+            "latestNaturalLanguagePrompts": [
+              {
+                "query": "Cliente similares"
+              }
+            ]
+          },
+          "settings": {
+            "type": "table",
+            "query": "/* Cliente similares\n */\n\nMATCH (c:Consumer)-[s:SIMILAR_JOURNEY]-(c2:Consumer) WHERE c.consumer_id = $consumer_consumer_id\nRETURN c2.consumer_id AS similar_consumer_id, round(s.similarity_score,2) AS similarity_score",
+            "databaseName": "fsi360",
+            "actions": [],
+            "version": 1,
+            "richRenderCells": false,
+            "enableRecordsDownload": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "1",
+      "version": 1,
+      "title": "Cockpit - Recomendações",
+      "widgets": [
+        {
+          "version": 1,
+          "title": "Contexto - Recomendação",
+          "w": 3,
+          "h": 4,
+          "x": 0,
+          "y": 1,
+          "meta": {},
+          "settings": {
+            "version": 1,
+            "type": "text",
+            "markdown": "###### Recomendação Baseado em 3 Pilares: \n\n| ID| Critério|\n|--------|--------|\n| 1| Similaridades de Jornadas / Consumers (Embeddings)|\n| 2| Popularidades de Produtos|\n| 3| Perfil dos Consumers|\n| 4| Recência de Compra|\n\n**O que a Similaridade de Jornada Considera?**\n\nComponentes da Similaridade (FastRP + Cosine Similarity)\n1. Estrutura da Jornada (Topologia do Grafo)\n- Sequência de eventos: Transaction → SupportTicket → Transaction → MetricSnapshot\n- Ordem dos acontecimentos: Primeiro evento, eventos intermediários, último evento\n- Comprimento da jornada: Quantos eventos totais aconteceram\n- Padrões de navegação: Quais tipos de eventos seguem quais outros\n2. Timing Entre Eventos (Pesos)\n\n- Velocidade da jornada: Quanto tempo entre eventos consecutivos\n- Peso do relacionamento NEXT: weight = 1.0 / (1.0 + days_until_next)\n- Eventos próximos no tempo têm peso maior\n- Eventos distantes no tempo têm peso menor\n- Ritmo de atividade: Jornadas rápidas vs lentas\n\n3. Tipos de Eventos (Labels dos Nodes)\n\n- Proporção de Transactions: Quanto da jornada é transação\n- Proporção de SupportTickets: Quanto da jornada é suporte\n- Proporção de MetricSnapshots: Quanto da jornada é atualização de Metricas\n\n"
+          }
+        },
+        {
+          "version": 1,
+          "title": "Selecione o Consumer",
+          "w": 3,
+          "h": 1,
+          "x": 0,
+          "y": 0,
+          "meta": {},
+          "settings": {
+            "version": 1,
+            "type": "filter",
+            "databaseName": "fsi360",
+            "entityType": "node",
+            "entityLabel": "Consumer",
+            "entityPropertyKey": "consumer_id",
+            "parameterName": "consumer_consumer_id",
+            "enableTimeZone": false,
+            "numberType": "Integer"
+          }
+        },
+        {
+          "version": 1,
+          "title": "Produtos Recomendados",
+          "w": 12,
+          "h": 6,
+          "x": 0,
+          "y": 5,
+          "meta": {
+            "latestCypherQueries": [
+              {
+                "query": "// ============================================================================\n// SISTEMA DE RECOMENDAÇÃO HÍBRIDO - Score Ponderado\n// ============================================================================\n\nMATCH (target:Consumer {consumer_id: $consumer_consumer_id})\n\n// =========================================================================\n// ESTRATÉGIA 1: COLLABORATIVE FILTERING (Jornadas Similares)\n// Score: 40% do total\n// =========================================================================\n\n// Encontrar consumers com jornadas similares\nOPTIONAL MATCH (target)-[sim:SIMILAR_JOURNEY]-(similar:Consumer)\nWHERE sim.similarity_score >= 0.1\n\n// Produtos que similares compraram\nOPTIONAL MATCH (similar)-[up:USES_PRODUCT]->(p1:Product)\n\n// Que target NÃO comprou\nWHERE NOT EXISTS {\n    MATCH (target)-[:USES_PRODUCT]->(p1)\n}\n\nWITH target, p1,\n     avg(sim.similarity_score) as avg_similarity,\n     count(DISTINCT similar) as similar_users_bought,\n     sum(up.count) as similar_purchase_count\n\n// Score colaborativo = (similaridade média * 20) + (num usuários * 2)\nWITH target, p1,\n     (coalesce(avg_similarity, 0) * 20) + (coalesce(similar_users_bought, 0) * 2) as collab_score,\n     avg_similarity,\n     similar_users_bought\n\n// =========================================================================\n// ESTRATÉGIA 2: POPULARITY (Produtos Populares)\n// Score: 20% do total\n// =========================================================================\n\nWITH target, p1, collab_score, avg_similarity, similar_users_bought\n\n// Popularidade geral do produto\nOPTIONAL MATCH (p1)<-[up_all:USES_PRODUCT]-()\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     count(up_all) as total_buyers\n\n// Score de popularidade (normalizado)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     coalesce(total_buyers, 0) * 0.1 as popularity_score,\n     total_buyers\n\n// =========================================================================\n// ESTRATÉGIA 3: SEGMENTAÇÃO (Produtos do Perfil)\n// Score: 15% do total\n// =========================================================================\n\n// Produtos populares no mesmo perfil (PRO ou não-PRO)\nOPTIONAL MATCH (same_profile:Consumer {is_pro: target.is_pro})-[:USES_PRODUCT]->(p1)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers,\n     count(same_profile) as same_profile_buyers\n\n// Score de perfil\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers,\n     coalesce(same_profile_buyers, 0) * 0.3 as profile_score,\n     same_profile_buyers\n\n// =========================================================================\n// ESTRATÉGIA 4: CATEGORIA DE INTERESSE (Produtos da mesma categoria)\n// Score: 15% do total\n// =========================================================================\n\n// Ver categorias que target já comprou\nOPTIONAL MATCH (target)-[:USES_PRODUCT]->(:Product)-[:HAS_TYPE]->(pt_interest:ProductType)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     collect(DISTINCT pt_interest) as target_categories\n\n// Verificar se produto é de categoria de interesse\nOPTIONAL MATCH (p1)-[:HAS_TYPE]->(pt:ProductType)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     pt, target_categories,\n     CASE WHEN pt IN target_categories THEN 15 ELSE 0 END as category_boost\n\n// =========================================================================\n// ESTRATÉGIA 5: RECÊNCIA (Produtos recentemente populares)\n// Score: 10% do total\n// =========================================================================\n\n// Verificar compras recentes do produto\nOPTIONAL MATCH (p1)<-[:OF_PRODUCT]-(t:Transaction)\nWHERE t.historical_at > datetime() - duration({days: 30})\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     pt, category_boost,\n     count(t) as recent_purchases\n\n// Score de recência\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     pt, category_boost,\n     coalesce(recent_purchases, 0) * 0.2 as recency_score,\n     recent_purchases\n\n// =========================================================================\n// CÁLCULO DO SCORE FINAL PONDERADO\n// =========================================================================\n\nWITH p1, pt,\n     collab_score,\n     popularity_score,\n     profile_score,\n     category_boost,\n     recency_score,\n     avg_similarity,\n     similar_users_bought,\n     total_buyers,\n     same_profile_buyers,\n     recent_purchases,\n     // Score final = soma ponderada de todos os componentes\n     (collab_score * $PesoSimilaridade) +           // 40% - Collaborative Filtering\n     (popularity_score * 0.20) +       // 20% - Popularidade\n     (profile_score * 0.15) +          // 15% - Perfil similar\n     (category_boost * 0.15) +         // 15% - Categoria de interesse\n     (recency_score * 0.10) as final_score  // 10% - Recência\n\nWHERE final_score > 0\n\n// =========================================================================\n// RETORNAR TOP 10 RECOMENDAÇÕES COM DETALHAMENTO\n// =========================================================================\n\nRETURN p1.product_id as product_id,\n       p1.product_name as produto,\n       pt.product_type_name as categoria,\n       round(final_score * 10) / 10 as score_final,\n\n       // Breakdown do score\n       round(collab_score * 10) / 10 as score_colaborativo,\n       round(popularity_score * 10) / 10 as score_popularidade,\n       round(profile_score * 10) / 10 as score_perfil,\n       round(category_boost * 10) / 10 as score_categoria,\n       round(recency_score * 10) / 10 as score_recencia,\n\n       // Métricas de suporte\n       coalesce(similar_users_bought, 0) as usuarios_similares,\n       coalesce(total_buyers, 0) as total_compradores,\n       coalesce(same_profile_buyers, 0) as compradores_mesmo_perfil,\n       coalesce(recent_purchases, 0) as compras_ultimos_30_dias,\n       round(coalesce(avg_similarity, 0) * 100) / 100 as similaridade_media,\n\n       // Classificação e confiança\n       CASE\n           WHEN final_score >= 50 THEN '🔴'\n           WHEN final_score >= 30 THEN '🟠 '\n           WHEN final_score >= 15 THEN '🟡 '\n           ELSE '⚪ CONSIDERAR'\n       END as prioridade\nORDER BY final_score DESC\nLIMIT 10;",
+                "origin": "user"
+              },
+              {
+                "query": "// ============================================================================\n// SISTEMA DE RECOMENDAÇÃO HÍBRIDO - Score Ponderado\n// ============================================================================\n\nMATCH (target:Consumer {consumer_id: $consumer_consumer_id})\n\n// =========================================================================\n// ESTRATÉGIA 1: COLLABORATIVE FILTERING (Jornadas Similares)\n// Score: 40% do total\n// =========================================================================\n\n// Encontrar consumers com jornadas similares\nOPTIONAL MATCH (target)-[sim:SIMILAR_JOURNEY]->(similar:Consumer)\nWHERE sim.similarity_score >= 0.1\n\n// Produtos que similares compraram\nOPTIONAL MATCH (similar)-[up:USES_PRODUCT]->(p1:Product)\n\n// Que target NÃO comprou\nWHERE NOT EXISTS {\n    MATCH (target)-[:USES_PRODUCT]->(p1)\n}\n\nWITH target, p1,\n     avg(sim.similarity_score) as avg_similarity,\n     count(DISTINCT similar) as similar_users_bought,\n     sum(up.count) as similar_purchase_count\n\n// Score colaborativo = (similaridade média * 20) + (num usuários * 2)\nWITH target, p1,\n     (coalesce(avg_similarity, 0) * 20) + (coalesce(similar_users_bought, 0) * 2) as collab_score,\n     avg_similarity,\n     similar_users_bought\n\n// =========================================================================\n// ESTRATÉGIA 2: POPULARITY (Produtos Populares)\n// Score: 20% do total\n// =========================================================================\n\nWITH target, p1, collab_score, avg_similarity, similar_users_bought\n\n// Popularidade geral do produto\nOPTIONAL MATCH (p1)<-[up_all:USES_PRODUCT]-()\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     count(up_all) as total_buyers\n\n// Score de popularidade (normalizado)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     coalesce(total_buyers, 0) * 0.1 as popularity_score,\n     total_buyers\n\n// =========================================================================\n// ESTRATÉGIA 3: SEGMENTAÇÃO (Produtos do Perfil)\n// Score: 15% do total\n// =========================================================================\n\n// Produtos populares no mesmo perfil (PRO ou não-PRO)\nOPTIONAL MATCH (same_profile:Consumer {is_pro: target.is_pro})-[:USES_PRODUCT]->(p1)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers,\n     count(same_profile) as same_profile_buyers\n\n// Score de perfil\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers,\n     coalesce(same_profile_buyers, 0) * 0.3 as profile_score,\n     same_profile_buyers\n\n// =========================================================================\n// ESTRATÉGIA 4: CATEGORIA DE INTERESSE (Produtos da mesma categoria)\n// Score: 15% do total\n// =========================================================================\n\n// Ver categorias que target já comprou\nOPTIONAL MATCH (target)-[:USES_PRODUCT]->(:Product)-[:HAS_TYPE]->(pt_interest:ProductType)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     collect(DISTINCT pt_interest) as target_categories\n\n// Verificar se produto é de categoria de interesse\nOPTIONAL MATCH (p1)-[:HAS_TYPE]->(pt:ProductType)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     pt, target_categories,\n     CASE WHEN pt IN target_categories THEN 15 ELSE 0 END as category_boost\n\n// =========================================================================\n// ESTRATÉGIA 5: RECÊNCIA (Produtos recentemente populares)\n// Score: 10% do total\n// =========================================================================\n\n// Verificar compras recentes do produto\nOPTIONAL MATCH (p1)<-[:OF_PRODUCT]-(t:Transaction)\nWHERE t.historical_at > datetime() - duration({days: 30})\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     pt, category_boost,\n     count(t) as recent_purchases\n\n// Score de recência\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     pt, category_boost,\n     coalesce(recent_purchases, 0) * 0.2 as recency_score,\n     recent_purchases\n\n// =========================================================================\n// CÁLCULO DO SCORE FINAL PONDERADO\n// =========================================================================\n\nWITH p1, pt,\n     collab_score,\n     popularity_score,\n     profile_score,\n     category_boost,\n     recency_score,\n     avg_similarity,\n     similar_users_bought,\n     total_buyers,\n     same_profile_buyers,\n     recent_purchases,\n     // Score final = soma ponderada de todos os componentes\n     (collab_score * $PesoSimilaridade) +           // 40% - Collaborative Filtering\n     (popularity_score * 0.20) +       // 20% - Popularidade\n     (profile_score * 0.15) +          // 15% - Perfil similar\n     (category_boost * 0.15) +         // 15% - Categoria de interesse\n     (recency_score * 0.10) as final_score  // 10% - Recência\n\nWHERE final_score > 0\n\n// =========================================================================\n// RETORNAR TOP 10 RECOMENDAÇÕES COM DETALHAMENTO\n// =========================================================================\n\nRETURN p1.product_id as product_id,\n       p1.product_name as produto,\n       pt.product_type_name as categoria,\n       round(final_score * 10) / 10 as score_final,\n\n       // Breakdown do score\n       round(collab_score * 10) / 10 as score_colaborativo,\n       round(popularity_score * 10) / 10 as score_popularidade,\n       round(profile_score * 10) / 10 as score_perfil,\n       round(category_boost * 10) / 10 as score_categoria,\n       round(recency_score * 10) / 10 as score_recencia,\n\n       // Métricas de suporte\n       coalesce(similar_users_bought, 0) as usuarios_similares,\n       coalesce(total_buyers, 0) as total_compradores,\n       coalesce(same_profile_buyers, 0) as compradores_mesmo_perfil,\n       coalesce(recent_purchases, 0) as compras_ultimos_30_dias,\n       round(coalesce(avg_similarity, 0) * 100) / 100 as similaridade_media,\n\n       // Classificação e confiança\n       CASE\n           WHEN final_score >= 50 THEN '🔴'\n           WHEN final_score >= 30 THEN '🟠 '\n           WHEN final_score >= 15 THEN '🟡 '\n           ELSE '⚪ CONSIDERAR'\n       END as prioridade\nORDER BY final_score DESC\nLIMIT 10;",
+                "origin": "user"
+              },
+              {
+                "query": "// ============================================================================\n// SISTEMA DE RECOMENDAÇÃO HÍBRIDO - Score Ponderado\n// ============================================================================\n\nMATCH (target:Consumer {consumer_id: $consumer_consumer_id})\n\n// =========================================================================\n// ESTRATÉGIA 1: COLLABORATIVE FILTERING (Jornadas Similares)\n// Score: 40% do total\n// =========================================================================\n\n// Encontrar consumers com jornadas similares\nOPTIONAL MATCH (target)-[sim:SIMILAR_JOURNEY]->(similar:Consumer)\nWHERE sim.similarity_score >= 0.1\n\n// Produtos que similares compraram\nOPTIONAL MATCH (similar)-[up:USES_PRODUCT]->(p1:Product)\n\n// Que target NÃO comprou\nWHERE NOT EXISTS {\n    MATCH (target)-[:USES_PRODUCT]->(p1)\n}\n\nWITH target, p1,\n     avg(sim.similarity_score) as avg_similarity,\n     count(DISTINCT similar) as similar_users_bought,\n     sum(up.count) as similar_purchase_count\n\n// Score colaborativo = (similaridade média * 20) + (num usuários * 2)\nWITH target, p1,\n     (coalesce(avg_similarity, 0) * 20) + (coalesce(similar_users_bought, 0) * 2) as collab_score,\n     avg_similarity,\n     similar_users_bought\n\n// =========================================================================\n// ESTRATÉGIA 2: POPULARITY (Produtos Populares)\n// Score: 20% do total\n// =========================================================================\n\nWITH target, p1, collab_score, avg_similarity, similar_users_bought\n\n// Popularidade geral do produto\nOPTIONAL MATCH (p1)<-[up_all:USES_PRODUCT]-()\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     count(up_all) as total_buyers\n\n// Score de popularidade (normalizado)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     coalesce(total_buyers, 0) * 0.1 as popularity_score,\n     total_buyers\n\n// =========================================================================\n// ESTRATÉGIA 3: SEGMENTAÇÃO (Produtos do Perfil)\n// Score: 15% do total\n// =========================================================================\n\n// Produtos populares no mesmo perfil (PRO ou não-PRO)\nOPTIONAL MATCH (same_profile:Consumer {is_pro: target.is_pro})-[:USES_PRODUCT]->(p1)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers,\n     count(same_profile) as same_profile_buyers\n\n// Score de perfil\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers,\n     coalesce(same_profile_buyers, 0) * 0.3 as profile_score,\n     same_profile_buyers\n\n// =========================================================================\n// ESTRATÉGIA 4: CATEGORIA DE INTERESSE (Produtos da mesma categoria)\n// Score: 15% do total\n// =========================================================================\n\n// Ver categorias que target já comprou\nOPTIONAL MATCH (target)-[:USES_PRODUCT]->(:Product)-[:HAS_TYPE]->(pt_interest:ProductType)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     collect(DISTINCT pt_interest) as target_categories\n\n// Verificar se produto é de categoria de interesse\nOPTIONAL MATCH (p1)-[:HAS_TYPE]->(pt:ProductType)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     pt, target_categories,\n     CASE WHEN pt IN target_categories THEN 15 ELSE 0 END as category_boost\n\n// =========================================================================\n// ESTRATÉGIA 5: RECÊNCIA (Produtos recentemente populares)\n// Score: 10% do total\n// =========================================================================\n\n// Verificar compras recentes do produto\nOPTIONAL MATCH (p1)<-[:OF_PRODUCT]-(t:Transaction)\nWHERE t.historical_at > datetime() - duration({days: 30})\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     pt, category_boost,\n     count(t) as recent_purchases\n\n// Score de recência\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     pt, category_boost,\n     coalesce(recent_purchases, 0) * 0.2 as recency_score,\n     recent_purchases\n\n// =========================================================================\n// CÁLCULO DO SCORE FINAL PONDERADO\n// =========================================================================\n\nWITH p1, pt,\n     collab_score,\n     popularity_score,\n     profile_score,\n     category_boost,\n     recency_score,\n     avg_similarity,\n     similar_users_bought,\n     total_buyers,\n     same_profile_buyers,\n     recent_purchases,\n     // Score final = soma ponderada de todos os componentes\n     (collab_score * 0.40) +           // 40% - Collaborative Filtering\n     (popularity_score * 0.20) +       // 20% - Popularidade\n     (profile_score * 0.15) +          // 15% - Perfil similar\n     (category_boost * 0.15) +         // 15% - Categoria de interesse\n     (recency_score * 0.10) as final_score  // 10% - Recência\n\nWHERE final_score > 0\n\n// =========================================================================\n// RETORNAR TOP 10 RECOMENDAÇÕES COM DETALHAMENTO\n// =========================================================================\n\nRETURN p1.product_id as product_id,\n       p1.product_name as produto,\n       pt.product_type_name as categoria,\n       round(final_score * 10) / 10 as score_final,\n\n       // Breakdown do score\n       round(collab_score * 10) / 10 as score_colaborativo,\n       round(popularity_score * 10) / 10 as score_popularidade,\n       round(profile_score * 10) / 10 as score_perfil,\n       round(category_boost * 10) / 10 as score_categoria,\n       round(recency_score * 10) / 10 as score_recencia,similar_users_bought,\n\n       // Métricas de suporte\n       coalesce(similar_users_bought, 0) as usuarios_similares,\n       coalesce(total_buyers, 0) as total_compradores,\n       coalesce(same_profile_buyers, 0) as compradores_mesmo_perfil,\n       coalesce(recent_purchases, 0) as compras_ultimos_30_dias,\n       round(coalesce(avg_similarity, 0) * 100) / 100 as similaridade_media,\n\n       // Classificação e confiança\n       CASE\n           WHEN final_score >= 50 THEN '🔴 ALTA PRIORIDADE'\n           WHEN final_score >= 30 THEN '🟠 MÉDIA PRIORIDADE'\n           WHEN final_score >= 15 THEN '🟡 BAIXA PRIORIDADE'\n           ELSE '⚪ CONSIDERAR'\n       END as prioridade\nORDER BY final_score DESC\nLIMIT 10;",
+                "origin": "user"
+              },
+              {
+                "query": "// ============================================================================\n// SISTEMA DE RECOMENDAÇÃO HÍBRIDO - Score Ponderado\n// ============================================================================\n\nMATCH (target:Consumer {consumer_id: $consumer_consumer_id})\n\n// =========================================================================\n// ESTRATÉGIA 1: COLLABORATIVE FILTERING (Jornadas Similares)\n// Score: 40% do total\n// =========================================================================\n\n// Encontrar consumers com jornadas similares\nOPTIONAL MATCH (target)-[sim:SIMILAR_JOURNEY]->(similar:Consumer)\nWHERE sim.similarity_score >= 0.1\n\n// Produtos que similares compraram\nOPTIONAL MATCH (similar)-[up:USES_PRODUCT]->(p1:Product)\n\n// Que target NÃO comprou\nWHERE NOT EXISTS {\n    MATCH (target)-[:USES_PRODUCT]->(p1)\n}\n\nWITH target, p1,\n     avg(sim.similarity_score) as avg_similarity,\n     count(DISTINCT similar) as similar_users_bought,\n     sum(up.count) as similar_purchase_count\n\n// Score colaborativo = (similaridade média * 20) + (num usuários * 2)\nWITH target, p1,\n     (coalesce(avg_similarity, 0) * 20) + (coalesce(similar_users_bought, 0) * 2) as collab_score,\n     avg_similarity,\n     similar_users_bought\n\n// =========================================================================\n// ESTRATÉGIA 2: POPULARITY (Produtos Populares)\n// Score: 20% do total\n// =========================================================================\n\nWITH target, p1, collab_score, avg_similarity, similar_users_bought\n\n// Popularidade geral do produto\nOPTIONAL MATCH (p1)<-[up_all:USES_PRODUCT]-()\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     count(up_all) as total_buyers\n\n// Score de popularidade (normalizado)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     coalesce(total_buyers, 0) * 0.1 as popularity_score,\n     total_buyers\n\n// =========================================================================\n// ESTRATÉGIA 3: SEGMENTAÇÃO (Produtos do Perfil)\n// Score: 15% do total\n// =========================================================================\n\n// Produtos populares no mesmo perfil (PRO ou não-PRO)\nOPTIONAL MATCH (same_profile:Consumer {is_pro: target.is_pro})-[:USES_PRODUCT]->(p1)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers,\n     count(same_profile) as same_profile_buyers\n\n// Score de perfil\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers,\n     coalesce(same_profile_buyers, 0) * 0.3 as profile_score,\n     same_profile_buyers\n\n// =========================================================================\n// ESTRATÉGIA 4: CATEGORIA DE INTERESSE (Produtos da mesma categoria)\n// Score: 15% do total\n// =========================================================================\n\n// Ver categorias que target já comprou\nOPTIONAL MATCH (target)-[:USES_PRODUCT]->(:Product)-[:HAS_TYPE]->(pt_interest:ProductType)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     collect(DISTINCT pt_interest) as target_categories\n\n// Verificar se produto é de categoria de interesse\nOPTIONAL MATCH (p1)-[:HAS_TYPE]->(pt:ProductType)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     pt, target_categories,\n     CASE WHEN pt IN target_categories THEN 15 ELSE 0 END as category_boost\n\n// =========================================================================\n// ESTRATÉGIA 5: RECÊNCIA (Produtos recentemente populares)\n// Score: 10% do total\n// =========================================================================\n\n// Verificar compras recentes do produto\nOPTIONAL MATCH (p1)<-[:OF_PRODUCT]-(t:Transaction)\nWHERE t.historical_at > datetime() - duration({days: 30})\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     pt, category_boost,\n     count(t) as recent_purchases\n\n// Score de recência\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     pt, category_boost,\n     coalesce(recent_purchases, 0) * 0.2 as recency_score,\n     recent_purchases\n\n// =========================================================================\n// CÁLCULO DO SCORE FINAL PONDERADO\n// =========================================================================\n\nWITH p1, pt,\n     collab_score,\n     popularity_score,\n     profile_score,\n     category_boost,\n     recency_score,\n     avg_similarity,\n     similar_users_bought,\n     total_buyers,\n     same_profile_buyers,\n     recent_purchases,\n     // Score final = soma ponderada de todos os componentes\n     (collab_score * 0.40) +           // 40% - Collaborative Filtering\n     (popularity_score * 0.20) +       // 20% - Popularidade\n     (profile_score * 0.15) +          // 15% - Perfil similar\n     (category_boost * 0.15) +         // 15% - Categoria de interesse\n     (recency_score * 0.10) as final_score  // 10% - Recência\n\nWHERE final_score > 0\n\n// =========================================================================\n// RETORNAR TOP 10 RECOMENDAÇÕES COM DETALHAMENTO\n// =========================================================================\n\nRETURN p1.product_id as product_id,\n       p1.product_name as produto,\n       pt.product_type_name as categoria,\n       round(final_score * 10) / 10 as score_final,\n\n       // Breakdown do score\n       round(collab_score * 10) / 10 as score_colaborativo,\n       round(popularity_score * 10) / 10 as score_popularidade,\n       round(profile_score * 10) / 10 as score_perfil,\n       round(category_boost * 10) / 10 as score_categoria,\n       round(recency_score * 10) / 10 as score_recencia,similar_users_bought,\n\n       // Métricas de suporte\n       coalesce(similar_users_bought, 0) as usuarios_similares,\n       coalesce(total_buyers, 0) as total_compradores,\n       coalesce(same_profile_buyers, 0) as compradores_mesmo_perfil,\n       coalesce(recent_purchases, 0) as compras_ultimos_30_dias,\n       round(coalesce(avg_similarity, 0) * 100) / 100 as similaridade_media,\n\n       // Classificação e confiança\n       CASE\n           WHEN final_score >= 50 THEN '🔴 ALTA PRIORIDADE'\n           WHEN final_score >= 30 THEN '🟠 MÉDIA PRIORIDADE'\n           WHEN final_score >= 15 THEN '🟡 BAIXA PRIORIDADE'\n           ELSE '⚪ CONSIDERAR'\n       END as prioridade,\n\n       CASE\n           WHEN similar_users_bought >= 5 AND avg_similarity >= 0.7 THEN '🟢 ALTA CONFIANÇA'\n           WHEN similar_users_bought >= 3 THEN '🟡 MÉDIA CONFIANÇA'\n           ELSE '⚪ BAIXA CONFIANÇA'\n       END as nivel_confianca\n\nORDER BY final_score DESC\nLIMIT 10;",
+                "origin": "user"
+              },
+              {
+                "query": "// ============================================================================\n// SISTEMA DE RECOMENDAÇÃO HÍBRIDO - Score Ponderado\n// ============================================================================\n\nMATCH (target:Consumer {consumer_id: $consumer_consumer_id})\n\n// =========================================================================\n// ESTRATÉGIA 1: COLLABORATIVE FILTERING (Jornadas Similares)\n// Score: 40% do total\n// =========================================================================\n\n// Encontrar consumers com jornadas similares\nOPTIONAL MATCH (target)-[sim:SIMILAR_JOURNEY]->(similar:Consumer)\nWHERE sim.similarity_score >= 0.1\n\n// Produtos que similares compraram\nOPTIONAL MATCH (similar)-[up:USES_PRODUCT]->(p1:Product)\n\n// Que target NÃO comprou\nWHERE NOT EXISTS {\n    MATCH (target)-[:USES_PRODUCT]->(p1)\n}\n\nWITH target, p1,\n     avg(sim.similarity_score) as avg_similarity,\n     count(DISTINCT similar) as similar_users_bought,\n     sum(up.count) as similar_purchase_count\n\n// Score colaborativo = (similaridade média * 20) + (num usuários * 2)\nWITH target, p1,\n     (coalesce(avg_similarity, 0) * 20) + (coalesce(similar_users_bought, 0) * 2) as collab_score,\n     avg_similarity,\n     similar_users_bought\n\n// =========================================================================\n// ESTRATÉGIA 2: POPULARITY (Produtos Populares)\n// Score: 20% do total\n// =========================================================================\n\nWITH target, p1, collab_score, avg_similarity, similar_users_bought\n\n// Popularidade geral do produto\nOPTIONAL MATCH (p1)<-[up_all:USES_PRODUCT]-()\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     count(up_all) as total_buyers\n\n// Score de popularidade (normalizado)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     coalesce(total_buyers, 0) * 0.1 as popularity_score,\n     total_buyers\n\n// =========================================================================\n// ESTRATÉGIA 3: SEGMENTAÇÃO (Produtos do Perfil)\n// Score: 15% do total\n// =========================================================================\n\n// Produtos populares no mesmo perfil (PRO ou não-PRO)\nOPTIONAL MATCH (same_profile:Consumer {is_pro: target.is_pro})-[:USES_PRODUCT]->(p1)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers,\n     count(same_profile) as same_profile_buyers\n\n// Score de perfil\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers,\n     coalesce(same_profile_buyers, 0) * 0.3 as profile_score,\n     same_profile_buyers\n\n// =========================================================================\n// ESTRATÉGIA 4: CATEGORIA DE INTERESSE (Produtos da mesma categoria)\n// Score: 15% do total\n// =========================================================================\n\n// Ver categorias que target já comprou\nOPTIONAL MATCH (target)-[:USES_PRODUCT]->(:Product)-[:HAS_TYPE]->(pt_interest:ProductType)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     collect(DISTINCT pt_interest) as target_categories\n\n// Verificar se produto é de categoria de interesse\nOPTIONAL MATCH (p1)-[:HAS_TYPE]->(pt:ProductType)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     pt, target_categories,\n     CASE WHEN pt IN target_categories THEN 15 ELSE 0 END as category_boost\n\n// =========================================================================\n// ESTRATÉGIA 5: RECÊNCIA (Produtos recentemente populares)\n// Score: 10% do total\n// =========================================================================\n\n// Verificar compras recentes do produto\nOPTIONAL MATCH (p1)<-[:OF_PRODUCT]-(t:Transaction)\nWHERE t.historical_at > datetime() - duration({days: 30})\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     pt, category_boost,\n     count(t) as recent_purchases\n\n// Score de recência\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     pt, category_boost,\n     coalesce(recent_purchases, 0) * 0.2 as recency_score,\n     recent_purchases\n\n// =========================================================================\n// CÁLCULO DO SCORE FINAL PONDERADO\n// =========================================================================\n\nWITH p1, pt,\n     collab_score,\n     popularity_score,\n     profile_score,\n     category_boost,\n     recency_score,\n     avg_similarity,\n     similar_users_bought,\n     total_buyers,\n     same_profile_buyers,\n     recent_purchases,\n     // Score final = soma ponderada de todos os componentes\n     (collab_score * 0.40) +           // 40% - Collaborative Filtering\n     (popularity_score * 0.20) +       // 20% - Popularidade\n     (profile_score * 0.15) +          // 15% - Perfil similar\n     (category_boost * 0.15) +         // 15% - Categoria de interesse\n     (recency_score * 0.10) as final_score  // 10% - Recência\n\nWHERE final_score > 0\n\n// =========================================================================\n// RETORNAR TOP 10 RECOMENDAÇÕES COM DETALHAMENTO\n// =========================================================================\n\nRETURN p1.product_id as product_id,\n       p1.product_name as produto,\n       pt.product_type_name as categoria,\n       round(final_score * 10) / 10 as score_final,\n\n       // Breakdown do score\n       round(collab_score * 10) / 10 as score_colaborativo,\n       round(popularity_score * 10) / 10 as score_popularidade,\n       round(profile_score * 10) / 10 as score_perfil,\n       round(category_boost * 10) / 10 as score_categoria,\n       round(recency_score * 10) / 10 as score_recencia,\n\n       // Métricas de suporte\n       coalesce(similar_users_bought, 0) as usuarios_similares,\n       coalesce(total_buyers, 0) as total_compradores,\n       coalesce(same_profile_buyers, 0) as compradores_mesmo_perfil,\n       coalesce(recent_purchases, 0) as compras_ultimos_30_dias,\n       round(coalesce(avg_similarity, 0) * 100) / 100 as similaridade_media,\n\n       // Classificação e confiança\n       CASE\n           WHEN final_score >= 50 THEN '🔴 ALTA PRIORIDADE'\n           WHEN final_score >= 30 THEN '🟠 MÉDIA PRIORIDADE'\n           WHEN final_score >= 15 THEN '🟡 BAIXA PRIORIDADE'\n           ELSE '⚪ CONSIDERAR'\n       END as prioridade,\n\n       CASE\n           WHEN similar_users_bought >= 5 AND avg_similarity >= 0.7 THEN '🟢 ALTA CONFIANÇA'\n           WHEN similar_users_bought >= 3 THEN '🟡 MÉDIA CONFIANÇA'\n           ELSE '⚪ BAIXA CONFIANÇA'\n       END as nivel_confianca\n\nORDER BY final_score DESC\nLIMIT 10;",
+                "origin": "user"
+              }
+            ]
+          },
+          "settings": {
+            "type": "table",
+            "query": "// ============================================================================\n// SISTEMA DE RECOMENDAÇÃO HÍBRIDO - Score Ponderado\n// ============================================================================\n\nMATCH (target:Consumer {consumer_id: $consumer_consumer_id})\n\n// =========================================================================\n// ESTRATÉGIA 1: COLLABORATIVE FILTERING (Jornadas Similares)\n// Score: 40% do total\n// =========================================================================\n\n// Encontrar consumers com jornadas similares\nOPTIONAL MATCH (target)-[sim:SIMILAR_JOURNEY]-(similar:Consumer)\nWHERE sim.similarity_score >= 0.1\n\n// Produtos que similares compraram\nOPTIONAL MATCH (similar)-[up:USES_PRODUCT]->(p1:Product)\n\n// Que target NÃO comprou\nWHERE NOT EXISTS {\n    MATCH (target)-[:USES_PRODUCT]->(p1)\n}\n\nWITH target, p1,\n     avg(sim.similarity_score) as avg_similarity,\n     count(DISTINCT similar) as similar_users_bought,\n     sum(up.count) as similar_purchase_count\n\n// Score colaborativo = (similaridade média * 20) + (num usuários * 2)\nWITH target, p1,\n     (coalesce(avg_similarity, 0) * 20) + (coalesce(similar_users_bought, 0) * 2) as collab_score,\n     avg_similarity,\n     similar_users_bought\n\n// =========================================================================\n// ESTRATÉGIA 2: POPULARITY (Produtos Populares)\n// Score: 20% do total\n// =========================================================================\n\nWITH target, p1, collab_score, avg_similarity, similar_users_bought\n\n// Popularidade geral do produto\nOPTIONAL MATCH (p1)<-[up_all:USES_PRODUCT]-()\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     count(up_all) as total_buyers\n\n// Score de popularidade (normalizado)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     coalesce(total_buyers, 0) * 0.1 as popularity_score,\n     total_buyers\n\n// =========================================================================\n// ESTRATÉGIA 3: SEGMENTAÇÃO (Produtos do Perfil)\n// Score: 15% do total\n// =========================================================================\n\n// Produtos populares no mesmo perfil (PRO ou não-PRO)\nOPTIONAL MATCH (same_profile:Consumer {is_pro: target.is_pro})-[:USES_PRODUCT]->(p1)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought, \n     popularity_score, total_buyers,\n     count(same_profile) as same_profile_buyers\n\n// Score de perfil\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers,\n     coalesce(same_profile_buyers, 0) * 0.3 as profile_score,\n     same_profile_buyers\n\n// =========================================================================\n// ESTRATÉGIA 4: CATEGORIA DE INTERESSE (Produtos da mesma categoria)\n// Score: 15% do total\n// =========================================================================\n\n// Ver categorias que target já comprou\nOPTIONAL MATCH (target)-[:USES_PRODUCT]->(:Product)-[:HAS_TYPE]->(pt_interest:ProductType)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     collect(DISTINCT pt_interest) as target_categories\n\n// Verificar se produto é de categoria de interesse\nOPTIONAL MATCH (p1)-[:HAS_TYPE]->(pt:ProductType)\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     pt, target_categories,\n     CASE WHEN pt IN target_categories THEN 15 ELSE 0 END as category_boost\n\n// =========================================================================\n// ESTRATÉGIA 5: RECÊNCIA (Produtos recentemente populares)\n// Score: 10% do total\n// =========================================================================\n\n// Verificar compras recentes do produto\nOPTIONAL MATCH (p1)<-[:OF_PRODUCT]-(t:Transaction)\nWHERE t.historical_at > datetime() - duration({days: 30})\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     pt, category_boost,\n     count(t) as recent_purchases\n\n// Score de recência\nWITH target, p1, collab_score, avg_similarity, similar_users_bought,\n     popularity_score, total_buyers, profile_score, same_profile_buyers,\n     pt, category_boost,\n     coalesce(recent_purchases, 0) * 0.2 as recency_score,\n     recent_purchases\n\n// =========================================================================\n// CÁLCULO DO SCORE FINAL PONDERADO\n// =========================================================================\n\nWITH p1, pt,\n     collab_score,\n     popularity_score,\n     profile_score,\n     category_boost,\n     recency_score,\n     avg_similarity,\n     similar_users_bought,\n     total_buyers,\n     same_profile_buyers,\n     recent_purchases,\n     // Score final = soma ponderada de todos os componentes\n     (collab_score * $PesoSimilaridade) +           // 40% - Collaborative Filtering\n     (popularity_score * 0.20) +       // 20% - Popularidade\n     (profile_score * 0.15) +          // 15% - Perfil similar\n     (category_boost * 0.15) +         // 15% - Categoria de interesse\n     (recency_score * 0.10) as final_score  // 10% - Recência\n\nWHERE final_score > 0\n\n// =========================================================================\n// RETORNAR TOP 10 RECOMENDAÇÕES COM DETALHAMENTO\n// =========================================================================\n\nRETURN p1.product_id as product_id,\n       p1.product_name as produto,\n       pt.product_type_name as categoria,\n       round(final_score * 10) / 10 as score_final,\n       \n       // Breakdown do score\n       round(collab_score * 10) / 10 as score_colaborativo,\n       round(popularity_score * 10) / 10 as score_popularidade,\n       round(profile_score * 10) / 10 as score_perfil,\n       round(category_boost * 10) / 10 as score_categoria,\n       round(recency_score * 10) / 10 as score_recencia,\n       \n       // Métricas de suporte\n       coalesce(similar_users_bought, 0) as usuarios_similares,\n       coalesce(total_buyers, 0) as total_compradores,\n       coalesce(same_profile_buyers, 0) as compradores_mesmo_perfil,\n       coalesce(recent_purchases, 0) as compras_ultimos_30_dias,\n       round(coalesce(avg_similarity, 0) * 100) / 100 as similaridade_media,\n       \n       // Classificação e confiança\n       CASE \n           WHEN final_score >= 50 THEN '🔴'\n           WHEN final_score >= 30 THEN '🟠 '\n           WHEN final_score >= 15 THEN '🟡 '\n           ELSE '⚪ CONSIDERAR'\n       END as prioridade\nORDER BY final_score DESC\nLIMIT 10;  ",
+            "databaseName": "fsi360",
+            "actions": [],
+            "version": 1,
+            "richRenderCells": false,
+            "enableRecordsDownload": true
+          }
+        },
+        {
+          "version": 1,
+          "title": "Jornada do Cliente",
+          "w": 9,
+          "h": 5,
+          "x": 3,
+          "y": 0,
+          "meta": {
+            "latestCypherQueries": [
+              {
+                "query": "MATCH p1 = (c:Consumer {consumer_id: $consumer_consumer_id})-[:FIRST]->(first)\nMATCH path = (first)-[:NEXT*0..20]->(event)\nRETURN c, path,p1",
+                "origin": "user"
+              },
+              {
+                "query": "MATCH (c:Consumer {consumer_id: $consumer_consumer_id})-[:PRIMEIRA]->(first)\nMATCH path = (first)-[:PROXIMA*0..20]->(event)\nRETURN c, path;",
+                "origin": "user"
+              }
+            ]
+          },
+          "settings": {
+            "type": "graph",
+            "query": "MATCH p1 = (c:Consumer {consumer_id: $consumer_consumer_id})-[:FIRST]->(first)\nMATCH path = (first)-[:NEXT*0..20]->(event)\nRETURN c, path,p1\n",
+            "databaseName": "fsi360",
+            "version": 2,
+            "enableSidePanel": true,
+            "enableContextMenu": true,
+            "layout": {
+              "type": "hierarchical",
+              "options": {
+                "direction": "right"
+              }
+            },
+            "enableDownloadImage": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "version": 1,
+      "title": "Cockpit -  Rede Conluio",
+      "widgets": [
+        {
+          "version": 1,
+          "title": "Total Transações",
+          "w": 2,
+          "h": 3,
+          "x": 2,
+          "y": 3,
+          "meta": {
+            "latestCypherQueries": [
+              {
+                "query": "// Volume total por rede (simplificado)\nMATCH (c:Consumer)\nWHERE c.collusion_component_id IS NOT NULL\nWITH c.collusion_component_id as component, collect(c) as members\nWHERE size(members) >= 5\n\n// Todas as transações originadas na rede\nUNWIND members as consumer\nOPTIONAL MATCH (consumer)-[:FROM]->(t:Transaction)\nWITH component,\n     size(members) as num_membros,\n     sum(t.paid_total_value) as volume_total,\n     count(t) as num_transacoes\n\nRETURN\n    round(Sum(volume_total),1)",
+                "origin": "user"
+              },
+              {
+                "query": "// Volume total por rede (simplificado)\nMATCH (c:Consumer)\nWHERE c.collusion_component_id IS NOT NULL\nWITH c.collusion_component_id as component, collect(c) as members\nWHERE size(members) >= 5\n\n// Todas as transações originadas na rede\nUNWIND members as consumer\nOPTIONAL MATCH (consumer)-[:FROM]->(t:Transaction)\nWITH component,\n     size(members) as num_membros,\n     sum(t.paid_total_value) as volume_total,\n     count(t) as num_transacoes\n\nRETURN\n    round(Sum(volume_total),2)",
+                "origin": "user"
+              },
+              {
+                "query": "// Volume total por rede (simplificado)\nMATCH (c:Consumer)\nWHERE c.collusion_component_id IS NOT NULL\nWITH c.collusion_component_id as component, collect(c) as members\nWHERE size(members) >= 5\n\n// Todas as transações originadas na rede\nUNWIND members as consumer\nOPTIONAL MATCH (consumer)-[:FROM]->(t:Transaction)\nWITH component,\n     size(members) as num_membros,\n     sum(t.paid_total_value) as volume_total,\n     count(t) as num_transacoes\n\nRETURN\n    round(Sum(volume_total),3)",
+                "origin": "user"
+              },
+              {
+                "query": "// Volume total por rede (simplificado)\nMATCH (c:Consumer)\nWHERE c.collusion_component_id IS NOT NULL\nWITH c.collusion_component_id as component, collect(c) as members\nWHERE size(members) >= 5\n\n// Todas as transações originadas na rede\nUNWIND members as consumer\nOPTIONAL MATCH (consumer)-[:FROM]->(t:Transaction)\nWITH component,\n     size(members) as num_membros,\n     sum(t.paid_total_value) as volume_total,\n     count(t) as num_transacoes\n\nRETURN\n    Sum(volume_total)",
+                "origin": "user"
+              },
+              {
+                "query": "/* total de Consumers compartilhando devices e location  */\n\nMATCH (c:Consumer)-[:HAS_DEVICE]->(d:Device)<-[:HAS_DEVICE]-(c2:Consumer)\nMATCH (c)-[:AT_LOCATION]->(l:Location)<-[:AT_LOCATION]-(c2)\nRETURN count(DISTINCT c) AS total_consumers_sharing_devices_and_locations",
+                "origin": "user"
+              }
+            ],
+            "latestNaturalLanguagePrompts": [
+              {
+                "query": "total de Consumers compartilhando devices e location"
+              },
+              {
+                "query": "total de Consumers compartilhando devices"
+              }
+            ]
+          },
+          "settings": {
+            "type": "singleValue",
+            "query": "// Volume total por rede (simplificado)\nMATCH (c:Consumer)\nWHERE c.collusion_component_id IS NOT NULL\nWITH c.collusion_component_id as component, collect(c) as members\nWHERE size(members) >= 5\n\n// Todas as transações originadas na rede\nUNWIND members as consumer\nOPTIONAL MATCH (consumer)-[:FROM]->(t:Transaction)\nWITH component, \n     size(members) as num_membros,\n     sum(t.paid_total_value) as volume_total,\n     count(t) as num_transacoes\n\nRETURN \n    SUM(num_transacoes)",
+            "databaseName": "fsi360",
+            "version": 1,
+            "fontSize": 48,
+            "textColor": "#0056ff",
+            "align": 5
+          }
+        },
+        {
+          "version": 1,
+          "title": "Selecione o ID da Rede",
+          "w": 8,
+          "h": 1,
+          "x": 4,
+          "y": 0,
+          "meta": {},
+          "settings": {
+            "version": 1,
+            "type": "filter",
+            "databaseName": "fsi360",
+            "entityType": "node",
+            "entityLabel": "Consumer",
+            "entityPropertyKey": "collusion_component_id",
+            "parameterName": "consumer_collusion_component_id",
+            "enableTimeZone": false,
+            "numberType": "Integer"
+          }
+        },
+        {
+          "version": 1,
+          "title": "Sharing   - Devices",
+          "w": 2,
+          "h": 2,
+          "x": 0,
+          "y": 2,
+          "meta": {
+            "latestCypherQueries": [
+              {
+                "query": "/* total de Consumers compartilhando devices */\n\nMATCH (c:Consumer)-[:HAS_DEVICE]->(d:Device)\nWITH d, COUNT(c) AS consumerCount\nWHERE consumerCount > 1\nRETURN COUNT(DISTINCT d) AS sharedDeviceCount",
+                "origin": "llm"
+              },
+              {
+                "query": "MATCH path =\n  (c1:Consumer)\n  ((:Consumer)-[:FROM]->(t:Transaction)-[:TO]->(:Consumer)){5}\n  (c1)\nWHERE head(t).is_pix = true\n  AND all(tx IN t WHERE tx.transaction_date = head(t).transaction_date)\nRETURN count(path);",
+                "origin": "user"
+              },
+              {
+                "query": "MATCH path =\n  (c1:Consumer)\n  ((:Consumer)-[:FROM]->(t:Transaction)-[:TO]->(:Consumer)){5}\n  (c1)\nWHERE head(t).is_pix = true\n  AND all(tx IN t WHERE tx.transaction_date = head(t).transaction_date)\nRETURN path;",
+                "origin": "user"
+              }
+            ],
+            "latestNaturalLanguagePrompts": [
+              {
+                "query": "total de Consumers compartilhando devices"
+              }
+            ]
+          },
+          "settings": {
+            "type": "singleValue",
+            "query": "/* total de Consumers compartilhando devices */\n\nMATCH (c:Consumer)-[:HAS_DEVICE]->(d:Device)\nWITH d, COUNT(c) AS consumerCount\nWHERE consumerCount > 1\nRETURN COUNT(DISTINCT d) AS sharedDeviceCount",
+            "databaseName": "fsi360",
+            "version": 1,
+            "fontSize": 48,
+            "textColor": "#0056ff",
+            "align": 5
+          }
+        },
+        {
+          "version": 1,
+          "title": "Grafo - Rede de Conluio",
+          "w": 8,
+          "h": 5,
+          "x": 4,
+          "y": 1,
+          "meta": {
+            "latestCypherQueries": [
+              {
+                "query": "/* List all consumer IDs along with their collusion component IDs and registration dates. */\n\nMATCH p =(c:Consumer)-[]-() WHERE c.collusion_component_id = 1201\nRETURN p",
+                "origin": "user"
+              },
+              {
+                "query": "/* List all consumer IDs along with their collusion component IDs and registration dates. */\n\nMATCH p =(c:Consumer)-[]-() WHERE c.collusion_component_id = 120\nRETURN p",
+                "origin": "user"
+              },
+              {
+                "query": "/* List all consumer IDs along with their collusion component IDs and registration dates. */\n\nMATCH (c:Consumer)\nRETURN c.consumer_id, c.collusion_component_id, c.registered_at",
+                "origin": "llm"
+              },
+              {
+                "query": "/* show network that has collusion id x, all network has colusion id\n\n */\n\nMATCH (d:Device)\nWHERE d.collusion_component_id = 'x'\nRETURN d",
+                "origin": "llm"
+              },
+              {
+                "query": "/* show network that has collusion id x\n */\n\nMATCH (c:Consumer)-[:HAS_DEVICE]->(d:Device)\nWHERE d.collusion_component_id = 12345\nRETURN c.consumer_id, d.device_model, d.device_os",
+                "origin": "llm"
+              }
+            ],
+            "latestNaturalLanguagePrompts": [
+              {
+                "query": "List all consumer IDs along with their collusion component IDs and registration dates."
+              },
+              {
+                "query": "show network that has collusion id x, all network has colusion id"
+              },
+              {
+                "query": "show network that has collusion id x"
+              }
+            ]
+          },
+          "settings": {
+            "type": "graph",
+            "query": "/* List all consumer IDs along with their collusion component IDs and registration dates. */\n\nMATCH p =(c:Consumer)-[]-() WHERE c.collusion_component_id = $consumer_collusion_component_id\nRETURN p",
+            "databaseName": "fsi360",
+            "version": 2,
+            "enableSidePanel": true,
+            "enableContextMenu": true,
+            "layout": {
+              "type": "d3Force"
+            },
+            "enableDownloadImage": true
+          }
+        },
+        {
+          "version": 1,
+          "title": "Sharing  - Devices e Location",
+          "w": 2,
+          "h": 2,
+          "x": 0,
+          "y": 4,
+          "meta": {
+            "latestCypherQueries": [
+              {
+                "query": "/* total de Consumers compartilhando devices e location  */\n\nMATCH (c:Consumer)-[:HAS_DEVICE]->(d:Device)<-[:HAS_DEVICE]-(c2:Consumer)\nMATCH (c)-[:AT_LOCATION]->(l:Location)<-[:AT_LOCATION]-(c2)\nRETURN count(DISTINCT c) AS total_consumers_sharing_devices_and_locations",
+                "origin": "user"
+              },
+              {
+                "query": "/* total de Consumers compartilhando devices e location  */\n\nMATCH (c:Consumer)-[:HAS_DEVICE]->(d:Device)<-[:HAS_DEVICE]-(c2:Consumer)\nMATCH (c)-[:AT_LOCATION]->(l:Location)<-[:AT_LOCATION]-(c2)\nRETURN toString(count(DISTINCT c)) + ' Consumers' AS total_consumers_sharing_devices_and_locations",
+                "origin": "user"
+              },
+              {
+                "query": "/* total de Consumers compartilhando devices e location  */\n\nMATCH (c:Consumer)-[:HAS_DEVICE]->(d:Device)<-[:HAS_DEVICE]-(c2:Consumer)\nMATCH (c)-[:AT_LOCATION]->(l:Location)<-[:AT_LOCATION]-(c2)\nRETURN toString(count(DISTINCT c)) + 'Compartilhados' AS total_consumers_sharing_devices_and_locations",
+                "origin": "user"
+              },
+              {
+                "query": "/* total de Consumers compartilhando devices e location  */\n\nMATCH (c:Consumer)-[:HAS_DEVICE]->(d:Device)<-[:HAS_DEVICE]-(c2:Consumer)\nMATCH (c)-[:AT_LOCATION]->(l:Location)<-[:AT_LOCATION]-(c2)\nRETURN count(DISTINCT c) AS toString(total_consumers_sharing_devices_and_locations) + 'Compartilhados'",
+                "origin": "user"
+              },
+              {
+                "query": "/* total de Consumers compartilhando devices */\n\nMATCH (c:Consumer)-[:HAS_DEVICE]->(d:Device)\nWITH d, COUNT(c) AS consumerCount\nWHERE consumerCount > 1\nRETURN COUNT(DISTINCT d) AS sharedDeviceCount",
+                "origin": "llm"
+              }
+            ],
+            "latestNaturalLanguagePrompts": [
+              {
+                "query": "total de Consumers compartilhando devices e location"
+              },
+              {
+                "query": "total de Consumers compartilhando devices"
+              }
+            ]
+          },
+          "settings": {
+            "type": "singleValue",
+            "query": "/* total de Consumers compartilhando devices e location  */\n\nMATCH (c:Consumer)-[:HAS_DEVICE]->(d:Device)<-[:HAS_DEVICE]-(c2:Consumer)\nMATCH (c)-[:AT_LOCATION]->(l:Location)<-[:AT_LOCATION]-(c2)\nRETURN count(DISTINCT c) AS total_consumers_sharing_devices_and_locations",
+            "databaseName": "fsi360",
+            "version": 1,
+            "fontSize": 48,
+            "textColor": "#0056ff",
+            "align": 5
+          }
+        },
+        {
+          "version": 1,
+          "title": "Score Fraude - Possíveis - Redes de Conluio",
+          "w": 12,
+          "h": 6,
+          "x": 0,
+          "y": 6,
+          "meta": {
+            "latestCypherQueries": [
+              {
+                "query": "// Identificar componentes de conluio COM comportamento fraudulento\nMATCH (c:Consumer)\nWHERE c.collusion_component_id IS NOT NULL\n\n// Agrupar por componente\nWITH c.collusion_component_id as component, collect(c) as members\nWHERE size(members) >= 3 // 3+ pessoas = rede\n\n// Métricas de fraude do componente\nUNWIND members as consumer\n\n// Transações PIX circulares\nOPTIONAL MATCH (consumer)-[:FROM]->(t1:Transaction)-[:TO]->(other:Consumer)\nWHERE other IN members AND t1.is_pix = true\nWITH component, members, consumer, count(t1) as pix_internos\n\n// Registros próximos (coordenados)\nWITH component, members,\n     sum(pix_internos) as total_pix_internos,\n     [m IN members | m.registered_at] as registration_dates\nWITH component, members, total_pix_internos,\n     reduce(same_day = 0, i IN range(0, size(registration_dates)-2) |\n            same_day + CASE\n                WHEN duration.between(registration_dates[i], registration_dates[i+1]).days <= 1\n                THEN 1 ELSE 0\n            END\n     ) as registros_coordenados\n\n// Devices compartilhados\nUNWIND members as m1\nMATCH (m1)-[:HAS_DEVICE]->(d:Device {collusion_component_id: component})\nWITH component, members, total_pix_internos, registros_coordenados,\n     count(DISTINCT d) as devices_compartilhados\n\n// Endereços compartilhados\nUNWIND members as m2\nMATCH (m2)-[:AT_LOCATION]->(addr:Location)<-[:AT_LOCATION]-(m1)\nWITH component, members, total_pix_internos, registros_coordenados,\n     devices_compartilhados,\n     count(DISTINCT addr) as enderecos_compartilhados\n\n// Score de fraude\nWITH component,\n     size(members) as num_membros,\n     devices_compartilhados,\n     enderecos_compartilhados,\n     total_pix_internos,\n     registros_coordenados,\n     (size(members) * 25) +\n     (devices_compartilhados * 15) +\n     (enderecos_compartilhados * 15) +\n     (total_pix_internos * 10) +\n     (registros_coordenados * 20) as fraud_score\nWHERE fraud_score >= 100 // Threshold crítico\n\nRETURN component as rede_id,\n       num_membros,\n       devices_compartilhados,\n       enderecos_compartilhados,\n       total_pix_internos,\n       registros_coordenados,\n       fraud_score,\n       CASE\n           WHEN fraud_score >= 275 THEN '🔴 BLOQUEIO SUGERIDO'\n           WHEN fraud_score >= 150 THEN '🟠 INVESTIGAÇÃO'\n           ELSE '🟡 MONITORAR'\n       END as acao_recomendada\nORDER BY fraud_score DESC\nLIMIT 20;",
+                "origin": "user"
+              },
+              {
+                "query": "// Identificar componentes de conluio COM comportamento fraudulento\nMATCH (c:Consumer)\nWHERE c.collusion_component_id IS NOT NULL\n\n// Agrupar por componente\nWITH c.collusion_component_id as component, collect(c) as members\nWHERE size(members) >= 3 // 3+ pessoas = rede\n\n// Métricas de fraude do componente\nUNWIND members as consumer\n\n// Transações PIX circulares\nOPTIONAL MATCH (consumer)-[:FROM]->(t1:Transaction)-[:TO]->(other:Consumer)\nWHERE other IN members AND t1.is_pix = true\nWITH component, members, consumer, count(t1) as pix_internos\n\n// Registros próximos (coordenados)\nWITH component, members,\n     sum(pix_internos) as total_pix_internos,\n     [m IN members | m.registered_at] as registration_dates\nWITH component, members, total_pix_internos,\n     reduce(same_day = 0, i IN range(0, size(registration_dates)-2) |\n            same_day + CASE\n                WHEN duration.between(registration_dates[i], registration_dates[i+1]).days <= 1\n                THEN 1 ELSE 0\n            END\n     ) as registros_coordenados\n\n// Devices compartilhados\nUNWIND members as m1\nMATCH (m1)-[:HAS_DEVICE]->(d:Device {collusion_component_id: component})\nWITH component, members, total_pix_internos, registros_coordenados,\n     count(DISTINCT d) as devices_compartilhados\n\n// Endereços compartilhados\nUNWIND members as m2\nMATCH (m2)-[:AT_LOCATION]->(:Location)<-[:AT_LOCATION]-(m1)\nWITH component, members, total_pix_internos, registros_coordenados,\n     devices_compartilhados,\n     count(DISTINCT addr) as enderecos_compartilhados\n\n// Score de fraude\nWITH component,\n     size(members) as num_membros,\n     devices_compartilhados,\n     enderecos_compartilhados,\n     total_pix_internos,\n     registros_coordenados,\n     (size(members) * 25) +\n     (devices_compartilhados * 15) +\n     (enderecos_compartilhados * 15) +\n     (total_pix_internos * 10) +\n     (registros_coordenados * 20) as fraud_score\nWHERE fraud_score >= 100 // Threshold crítico\n\nRETURN component as rede_id,\n       num_membros,\n       devices_compartilhados,\n       enderecos_compartilhados,\n       total_pix_internos,\n       registros_coordenados,\n       fraud_score,\n       CASE\n           WHEN fraud_score >= 275 THEN '🔴 BLOQUEIO SUGERIDO'\n           WHEN fraud_score >= 150 THEN '🟠 INVESTIGAÇÃO'\n           ELSE '🟡 MONITORAR'\n       END as acao_recomendada\nORDER BY fraud_score DESC\nLIMIT 20;",
+                "origin": "user"
+              },
+              {
+                "query": "// Identificar componentes de conluio COM comportamento fraudulento\nMATCH (c:Consumer)\nWHERE c.collusion_component_id IS NOT NULL\n\n// Agrupar por componente\nWITH c.collusion_component_id as component, collect(c) as members\nWHERE size(members) >= 3 // 3+ pessoas = rede\n\n// Métricas de fraude do componente\nUNWIND members as consumer\n\n// Transações PIX circulares\nOPTIONAL MATCH (consumer)-[:FROM]->(t1:Transaction)-[:TO]->(other:Consumer)\nWHERE other IN members AND t1.is_pix = true\nWITH component, members, consumer, count(t1) as pix_internos\n\n// Registros próximos (coordenados)\nWITH component, members,\n     sum(pix_internos) as total_pix_internos,\n     [m IN members | m.registered_at] as registration_dates\nWITH component, members, total_pix_internos,\n     reduce(same_day = 0, i IN range(0, size(registration_dates)-2) |\n            same_day + CASE\n                WHEN duration.between(registration_dates[i], registration_dates[i+1]).days <= 1\n                THEN 1 ELSE 0\n            END\n     ) as registros_coordenados\n\n// Devices compartilhados\nUNWIND members as m1\nMATCH (m1)-[:HAS_DEVICE]->(d:Device {collusion_component_id: component})\nWITH component, members, total_pix_internos, registros_coordenados,\n     count(DISTINCT d) as devices_compartilhados\n\n// Endereços compartilhados\nUNWIND members as m2\nMATCH (m2)-[:AT_LOCATION]->(addr:Location)\nWITH component, members, total_pix_internos, registros_coordenados,\n     devices_compartilhados,\n     count(DISTINCT addr) as enderecos_compartilhados\n\n// Score de fraude\nWITH component,\n     size(members) as num_membros,\n     devices_compartilhados,\n     enderecos_compartilhados,\n     total_pix_internos,\n     registros_coordenados,\n     (size(members) * 25) +\n     (devices_compartilhados * 15) +\n     (enderecos_compartilhados * 15) +\n     (total_pix_internos * 10) +\n     (registros_coordenados * 20) as fraud_score\nWHERE fraud_score >= 100 // Threshold crítico\n\nRETURN component as rede_id,\n       num_membros,\n       devices_compartilhados,\n       enderecos_compartilhados,\n       total_pix_internos,\n       registros_coordenados,\n       fraud_score,\n       CASE\n           WHEN fraud_score >= 275 THEN '🔴 BLOQUEIO SUGERIDO'\n           WHEN fraud_score >= 150 THEN '🟠 INVESTIGAÇÃO'\n           ELSE '🟡 MONITORAR'\n       END as acao_recomendada\nORDER BY fraud_score DESC\nLIMIT 20;",
+                "origin": "user"
+              },
+              {
+                "query": "// Identificar componentes de conluio COM comportamento fraudulento\nMATCH (c:Consumer)\nWHERE c.collusion_component_id IS NOT NULL\n\n// Agrupar por componente\nWITH c.collusion_component_id as component, collect(c) as members\nWHERE size(members) >= 3 // 3+ pessoas = rede\n\n// Métricas de fraude do componente\nUNWIND members as consumer\n\n// Transações PIX circulares\nOPTIONAL MATCH (consumer)-[:FROM]->(t1:Transaction)-[:TO]->(other:Consumer)\nWHERE other IN members AND t1.is_pix = true\nWITH component, members, consumer, count(t1) as pix_internos\n\n// Registros próximos (coordenados)\nWITH component, members,\n     sum(pix_internos) as total_pix_internos,\n     [m IN members | m.registered_at] as registration_dates\nWITH component, members, total_pix_internos,\n     reduce(same_day = 0, i IN range(0, size(registration_dates)-2) |\n            same_day + CASE\n                WHEN duration.between(registration_dates[i], registration_dates[i+1]).days <= 1\n                THEN 1 ELSE 0\n            END\n     ) as registros_coordenados\n\n// Devices compartilhados\nUNWIND members as m1\nMATCH (m1)-[:HAS_DEVICE]->(d:Device {collusion_component_id: component})\nWITH component, members, total_pix_internos, registros_coordenados,\n     count(DISTINCT d) as devices_compartilhados\n\n// Endereços compartilhados\nUNWIND members as m2\nMATCH (m2)-[:AT_LOCATION]->(addr:Location)\nWITH component, members, total_pix_internos, registros_coordenados,\n     devices_compartilhados,\n     count(DISTINCT addr) as enderecos_compartilhados\n\n// Score de fraude\nWITH component,\n     size(members) as num_membros,\n     devices_compartilhados,\n     enderecos_compartilhados,\n     total_pix_internos,\n     registros_coordenados,\n     (size(members) * 25) +\n     (devices_compartilhados * 15) +\n     (enderecos_compartilhados * 15) +\n     (total_pix_internos * 10) +\n     (registros_coordenados * 20) as fraud_score\nWHERE fraud_score >= 100 // Threshold crítico\n\nRETURN component as rede_id,\n       num_membros,\n       devices_compartilhados,\n       enderecos_compartilhados,\n       total_pix_internos,\n       registros_coordenados,\n       fraud_score,\n       CASE\n           WHEN fraud_score >= 255 THEN '🔴 BLOQUEIO SUGERIDO'\n           WHEN fraud_score >= 150 THEN '🟠 INVESTIGAÇÃO'\n           ELSE '🟡 MONITORAR'\n       END as acao_recomendada\nORDER BY fraud_score DESC\nLIMIT 20;",
+                "origin": "user"
+              },
+              {
+                "query": "// Identificar componentes de conluio COM comportamento fraudulento\nMATCH (c:Consumer)\nWHERE c.collusion_component_id IS NOT NULL\n\n// Agrupar por componente\nWITH c.collusion_component_id as component, collect(c) as members\nWHERE size(members) >= 3 // 3+ pessoas = rede\n\n// Métricas de fraude do componente\nUNWIND members as consumer\n\n// Transações PIX circulares\nOPTIONAL MATCH (consumer)-[:FROM]->(t1:Transaction)-[:TO]->(other:Consumer)\nWHERE other IN members AND t1.is_pix = true\nWITH component, members, consumer, count(t1) as pix_internos\n\n// Registros próximos (coordenados)\nWITH component, members,\n     sum(pix_internos) as total_pix_internos,\n     [m IN members | m.registered_at] as registration_dates\nWITH component, members, total_pix_internos,\n     reduce(same_day = 0, i IN range(0, size(registration_dates)-2) |\n            same_day + CASE\n                WHEN duration.between(registration_dates[i], registration_dates[i+1]).days <= 1\n                THEN 1 ELSE 0\n            END\n     ) as registros_coordenados\n\n// Devices compartilhados\nUNWIND members as m1\nMATCH (m1)-[:HAS_DEVICE]->(d:Device {collusion_component_id: component})\nWITH component, members, total_pix_internos, registros_coordenados,\n     count(DISTINCT d) as devices_compartilhados\n\n// Endereços compartilhados\nUNWIND members as m2\nMATCH (m2)-[:AT_LOCATION]->(addr:Location)\nWITH component, members, total_pix_internos, registros_coordenados,\n     devices_compartilhados,\n     count(DISTINCT addr) as enderecos_compartilhados\n\n// Score de fraude\nWITH component,\n     size(members) as num_membros,\n     devices_compartilhados,\n     enderecos_compartilhados,\n     total_pix_internos,\n     registros_coordenados,\n     (size(members) * 25) +\n     (devices_compartilhados * 15) +\n     (enderecos_compartilhados * 15) +\n     (total_pix_internos * 10) +\n     (registros_coordenados * 20) as fraud_score\nWHERE fraud_score >= 100 // Threshold crítico\n\nRETURN component as rede_id,\n       num_membros,\n       devices_compartilhados,\n       enderecos_compartilhados,\n       total_pix_internos,\n       registros_coordenados,\n       fraud_score,\n       CASE\n           WHEN fraud_score >= 255 THEN '🔴 BLOQUEIO SUGERIDO'\n           WHEN fraud_score >= 150 THEN '🟠 INVESTIGAÇÃO'\n           ELSE '🟡 MONITORAR'\n       END as acao_recomendada\nORDER BY fraud_score DESC\nLIMIT 10;",
+                "origin": "user"
+              }
+            ]
+          },
+          "settings": {
+            "type": "table",
+            "query": "// Identificar componentes de conluio COM comportamento fraudulento\nMATCH (c:Consumer)\nWHERE c.collusion_component_id IS NOT NULL\n\n// Agrupar por componente\nWITH c.collusion_component_id as component, collect(c) as members\nWHERE size(members) >= 3 // 3+ pessoas = rede\n\n// Métricas de fraude do componente\nUNWIND members as consumer\n\n// Transações PIX circulares\nOPTIONAL MATCH (consumer)-[:FROM]->(t1:Transaction)-[:TO]->(other:Consumer)\nWHERE other IN members AND t1.is_pix = true\nWITH component, members, consumer, count(t1) as pix_internos\n\n// Registros próximos (coordenados)\nWITH component, members,\n     sum(pix_internos) as total_pix_internos,\n     [m IN members | m.registered_at] as registration_dates\nWITH component, members, total_pix_internos,\n     reduce(same_day = 0, i IN range(0, size(registration_dates)-2) |\n            same_day + CASE\n                WHEN duration.between(registration_dates[i], registration_dates[i+1]).days <= 1\n                THEN 1 ELSE 0\n            END\n     ) as registros_coordenados\n\n// Devices compartilhados\nUNWIND members as m1\nMATCH (m1)-[:HAS_DEVICE]->(d:Device {collusion_component_id: component})\nWITH component, members, total_pix_internos, registros_coordenados,\n     count(DISTINCT d) as devices_compartilhados\n\n// Endereços compartilhados\nUNWIND members as m2\nMATCH (m2)-[:AT_LOCATION]->(addr:Location)<-[:AT_LOCATION]-(m1)\nWITH component, members, total_pix_internos, registros_coordenados, \n     devices_compartilhados,\n     count(DISTINCT addr) as enderecos_compartilhados\n\n// Score de fraude\nWITH component,\n     size(members) as num_membros,\n     devices_compartilhados,\n     enderecos_compartilhados,\n     total_pix_internos,\n     registros_coordenados,\n     (size(members) * 25) +\n     (devices_compartilhados * 15) +\n     (enderecos_compartilhados * 15) +\n     (total_pix_internos * 10) +\n     (registros_coordenados * 20) as fraud_score\nWHERE fraud_score >= 100 // Threshold crítico\n\nRETURN component as rede_id,\n       num_membros,\n       devices_compartilhados,\n       enderecos_compartilhados,\n       total_pix_internos,\n       registros_coordenados,\n       fraud_score,\n       CASE\n           WHEN fraud_score >= 275 THEN '🔴 BLOQUEIO SUGERIDO'\n           WHEN fraud_score >= 150 THEN '🟠 INVESTIGAÇÃO'\n           ELSE '🟡 MONITORAR'\n       END as acao_recomendada\nORDER BY fraud_score DESC\nLIMIT 13;",
+            "databaseName": "fsi360",
+            "actions": [],
+            "version": 1,
+            "richRenderCells": false,
+            "enableRecordsDownload": true
+          }
+        },
+        {
+          "version": 1,
+          "title": "Redes de Conluio",
+          "w": 2,
+          "h": 2,
+          "x": 0,
+          "y": 0,
+          "meta": {
+            "latestCypherQueries": [
+              {
+                "query": "MATCH (c:Consumer) WITH c.collusion_component_id as redeId, count(c) as redeNum WHERE redeNum > 4 RETURN count(redeId)",
+                "origin": "user"
+              },
+              {
+                "query": "MATCH (c:Consumer) WITH c.collusion_component_id as redeId, count(c) as redeNum WHERE redeNum > 4 RETURN redeId",
+                "origin": "user"
+              },
+              {
+                "query": "MATCH (c:Consumer) WITH c.collusion_component_id as redeId, count(c) as redeNum WHERE redeNum > 4 RETURN redeId,",
+                "origin": "user"
+              },
+              {
+                "query": "MATCH (c:Consumer) WITH c.collusion_component_id as redeId, count(c) as redeNum WHERE redeNum > 4 RETURN redeId, redeNum",
+                "origin": "user"
+              },
+              {
+                "query": "MATCH (c:Consumer) RETURN c.collusion_component_id, count(c)",
+                "origin": "user"
+              }
+            ]
+          },
+          "settings": {
+            "type": "singleValue",
+            "query": "MATCH (c:Consumer) WITH c.collusion_component_id as redeId, count(c) as redeNum WHERE redeNum > 4 RETURN count(redeId)",
+            "databaseName": "fsi360",
+            "version": 1,
+            "fontSize": 48,
+            "textColor": "#0053fc",
+            "align": 5
+          }
+        },
+        {
+          "version": 1,
+          "title": "Total Movimentado (R$)",
+          "w": 2,
+          "h": 3,
+          "x": 2,
+          "y": 0,
+          "meta": {
+            "latestCypherQueries": [
+              {
+                "query": "// Volume total por rede (simplificado)\nMATCH (c:Consumer)\nWHERE c.collusion_component_id IS NOT NULL\nWITH c.collusion_component_id as component, collect(c) as members\nWHERE size(members) >= 5\n\n// Todas as transações originadas na rede\nUNWIND members as consumer\nOPTIONAL MATCH (consumer)-[:FROM]->(t:Transaction)\nWITH component,\n     size(members) as num_membros,\n     sum(t.paid_total_value) as volume_total,\n     count(t) as num_transacoes\n\nRETURN\n    round(Sum(volume_total),1)",
+                "origin": "user"
+              },
+              {
+                "query": "// Volume total por rede (simplificado)\nMATCH (c:Consumer)\nWHERE c.collusion_component_id IS NOT NULL\nWITH c.collusion_component_id as component, collect(c) as members\nWHERE size(members) >= 5\n\n// Todas as transações originadas na rede\nUNWIND members as consumer\nOPTIONAL MATCH (consumer)-[:FROM]->(t:Transaction)\nWITH component,\n     size(members) as num_membros,\n     sum(t.paid_total_value) as volume_total,\n     count(t) as num_transacoes\n\nRETURN\n    round(Sum(volume_total),2)",
+                "origin": "user"
+              },
+              {
+                "query": "// Volume total por rede (simplificado)\nMATCH (c:Consumer)\nWHERE c.collusion_component_id IS NOT NULL\nWITH c.collusion_component_id as component, collect(c) as members\nWHERE size(members) >= 5\n\n// Todas as transações originadas na rede\nUNWIND members as consumer\nOPTIONAL MATCH (consumer)-[:FROM]->(t:Transaction)\nWITH component,\n     size(members) as num_membros,\n     sum(t.paid_total_value) as volume_total,\n     count(t) as num_transacoes\n\nRETURN\n    round(Sum(volume_total),3)",
+                "origin": "user"
+              },
+              {
+                "query": "// Volume total por rede (simplificado)\nMATCH (c:Consumer)\nWHERE c.collusion_component_id IS NOT NULL\nWITH c.collusion_component_id as component, collect(c) as members\nWHERE size(members) >= 5\n\n// Todas as transações originadas na rede\nUNWIND members as consumer\nOPTIONAL MATCH (consumer)-[:FROM]->(t:Transaction)\nWITH component,\n     size(members) as num_membros,\n     sum(t.paid_total_value) as volume_total,\n     count(t) as num_transacoes\n\nRETURN\n    Sum(volume_total)",
+                "origin": "user"
+              },
+              {
+                "query": "/* total de Consumers compartilhando devices e location  */\n\nMATCH (c:Consumer)-[:HAS_DEVICE]->(d:Device)<-[:HAS_DEVICE]-(c2:Consumer)\nMATCH (c)-[:AT_LOCATION]->(l:Location)<-[:AT_LOCATION]-(c2)\nRETURN count(DISTINCT c) AS total_consumers_sharing_devices_and_locations",
+                "origin": "user"
+              }
+            ],
+            "latestNaturalLanguagePrompts": [
+              {
+                "query": "total de Consumers compartilhando devices e location"
+              },
+              {
+                "query": "total de Consumers compartilhando devices"
+              }
+            ]
+          },
+          "settings": {
+            "type": "singleValue",
+            "query": "// Volume total por rede (simplificado)\nMATCH (c:Consumer)\nWHERE c.collusion_component_id IS NOT NULL\nWITH c.collusion_component_id as component, collect(c) as members\nWHERE size(members) >= 5\n\n// Todas as transações originadas na rede\nUNWIND members as consumer\nOPTIONAL MATCH (consumer)-[:FROM]->(t:Transaction)\nWITH component, \n     size(members) as num_membros,\n     sum(t.paid_total_value) as volume_total,\n     count(t) as num_transacoes\n\nRETURN \n    round(Sum(volume_total),1)\n",
+            "databaseName": "fsi360",
+            "version": 1,
+            "fontSize": 48,
+            "textColor": "#0056ff",
+            "align": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "version": 1,
+      "title": "Cockpit -  Fraude e PLD",
+      "widgets": [
+        {
+          "version": 1,
+          "title": "Total Movimentado (R$)",
+          "w": 2,
+          "h": 3,
+          "x": 0,
+          "y": 3,
+          "meta": {
+            "latestCypherQueries": [
+              {
+                "query": "MATCH path =\n  (c1:Consumer)\n  ((:Consumer)-[:FROM]->(t:Transaction)-[:TO]->(:Consumer)){4,5}\n  (c1)\nWHERE head(t).is_pix = true\n  AND all(tx IN t WHERE tx.transaction_date = head(t).transaction_date)\nRETURN sum(head(t).paid_total_value)",
+                "origin": "user"
+              },
+              {
+                "query": "MATCH path =\n  (c1:Consumer)\n  ((:Consumer)-[:FROM]->(t:Transaction)-[:TO]->(:Consumer)){5}\n  (c1)\nWHERE head(t).is_pix = true\n  AND all(tx IN t WHERE tx.transaction_date = head(t).transaction_date)\nRETURN sum(head(t).paid_total_value)",
+                "origin": "user"
+              },
+              {
+                "query": "MATCH path =\n  (c1:Consumer)\n  ((:Consumer)-[:FROM]->(t:Transaction)-[:TO]->(:Consumer)){5}\n  (c1)\nWHERE head(t).is_pix = true\n  AND all(tx IN t WHERE tx.transaction_date = head(t).transaction_date)\nRETURN sum((t).paid_total_value)",
+                "origin": "user"
+              },
+              {
+                "query": "MATCH path =\n  (c1:Consumer)\n  ((:Consumer)-[:FROM]->(t:Transaction)-[:TO]->(:Consumer)){5}\n  (c1)\nWHERE head(t).is_pix = true\n  AND all(tx IN t WHERE tx.transaction_date = head(t).transaction_date)\nRETURN sum(t.paid_total_value)",
+                "origin": "user"
+              },
+              {
+                "query": "// Volume total por rede (simplificado)\nMATCH (c:Consumer)\nWHERE c.collusion_component_id IS NOT NULL\nWITH c.collusion_component_id as component, collect(c) as members\nWHERE size(members) >= 5\n\n// Todas as transações originadas na rede\nUNWIND members as consumer\nOPTIONAL MATCH (consumer)-[:FROM]->(t:Transaction)\nWITH component,\n     size(members) as num_membros,\n     sum(t.paid_total_value) as volume_total,\n     count(t) as num_transacoes\n\nRETURN\n    round(Sum(volume_total),1)",
+                "origin": "user"
+              }
+            ],
+            "latestNaturalLanguagePrompts": [
+              {
+                "query": "total de Consumers compartilhando devices e location"
+              },
+              {
+                "query": "total de Consumers compartilhando devices"
+              }
+            ]
+          },
+          "settings": {
+            "type": "singleValue",
+            "query": "MATCH path =\n  (c1:Consumer)\n  ((:Consumer)-[:FROM]->(t:Transaction)-[:TO]->(:Consumer)){4,5}\n  (c1)\nWHERE head(t).is_pix = true\n  AND all(tx IN t WHERE tx.transaction_date = head(t).transaction_date)\nRETURN sum(head(t).paid_total_value)\n",
+            "databaseName": "fsi360",
+            "version": 1,
+            "fontSize": 48,
+            "textColor": "#0056ff",
+            "align": 5
+          }
+        },
+        {
+          "version": 1,
+          "title": "Grafo - Pagamentos Circulares - 4 a 5 Níveis",
+          "w": 10,
+          "h": 6,
+          "x": 2,
+          "y": 0,
+          "meta": {
+            "latestCypherQueries": [
+              {
+                "query": "MATCH path =\n  (c1:Consumer)\n  ((:Consumer)-[:FROM]->(t:Transaction)-[:TO]->(:Consumer)){4,5}\n  (c1)\nWHERE head(t).is_pix = true\n  AND all(tx IN t WHERE tx.transaction_date = head(t).transaction_date)\nRETURN path;",
+                "origin": "user"
+              },
+              {
+                "query": "MATCH path =\n  (c1:Consumer)\n  ((:Consumer)-[:FROM]->(t:Transaction)-[:TO]->(:Consumer)){3,4,5}\n  (c1)\nWHERE head(t).is_pix = true\n  AND all(tx IN t WHERE tx.transaction_date = head(t).transaction_date)\nRETURN path;",
+                "origin": "user"
+              },
+              {
+                "query": "MATCH path =\n  (c1:Consumer)\n  ((:Consumer)-[:FROM]->(t:Transaction)-[:TO]->(:Consumer)){5}\n  (c1)\nWHERE head(t).is_pix = true\n  AND all(tx IN t WHERE tx.transaction_date = head(t).transaction_date)\nRETURN path;",
+                "origin": "user"
+              },
+              {
+                "query": "MATCH path =\n  (c1:Consumer)\n  ((:Consumer)-[:FROM]->(t:Transaction)-[:TO]->(:Consumer)){nivel}\n  (c1)\nWHERE head(t).is_pix = true\n  AND all(tx IN t WHERE tx.transaction_date = head(t).transaction_date)\nRETURN path;",
+                "origin": "user"
+              },
+              {
+                "query": "MATCH path =\n  (c1:Consumer)\n  ((:Consumer)-[:FROM]->(t:Transaction)-[:TO]->(:Consumer)){$nivel}\n  (c1)\nWHERE head(t).is_pix = true\n  AND all(tx IN t WHERE tx.transaction_date = head(t).transaction_date)\nRETURN path;",
+                "origin": "user"
+              }
+            ],
+            "latestNaturalLanguagePrompts": [
+              {
+                "query": "List all consumer IDs along with their collusion component IDs and registration dates."
+              },
+              {
+                "query": "show network that has collusion id x, all network has colusion id"
+              },
+              {
+                "query": "show network that has collusion id x"
+              }
+            ]
+          },
+          "settings": {
+            "type": "graph",
+            "query": "MATCH path =\n  (c1:Consumer)\n  ((:Consumer)-[:FROM]->(t:Transaction)-[:TO]->(:Consumer)){4,5}\n  (c1)\nWHERE head(t).is_pix = true\n  AND all(tx IN t WHERE tx.transaction_date = head(t).transaction_date)\nRETURN path;",
+            "databaseName": "fsi360",
+            "version": 2,
+            "enableSidePanel": true,
+            "enableContextMenu": true,
+            "layout": {
+              "type": "d3Force"
+            },
+            "enableDownloadImage": true
+          }
+        },
+        {
+          "version": 1,
+          "title": "TOP USUÁRIOS EM CICLOS",
+          "w": 12,
+          "h": 5,
+          "x": 0,
+          "y": 6,
+          "meta": {
+            "latestCypherQueries": [
+              {
+                "query": "// Usuários que mais aparecem em ciclos\nMATCH path =\n  (c1:Consumer)\n  ((:Consumer)-[:FROM]->(t:Transaction)-[:TO]->(:Consumer)){3,5}\n  (c1)\n\nRETURN\n    c1.consumer_id as usuario,\n    count(path) as num_ciclos,\n    sum([tx IN nodes(path) WHERE tx:Transaction | tx.paid_total_value][0]) as volume_total\n\nORDER BY num_ciclos DESC\nLIMIT 20;",
+                "origin": "user"
+              },
+              {
+                "query": "// Usuários que mais aparecem em ciclos\nMATCH path =\n  (c1:Consumer)\n  ((:Consumer)-[:FROM]->(:Transaction)-[:TO]->(:Consumer)){3,5}\n  (c1)\n\nRETURN\n    c1.consumer_id as usuario,\n    count(path) as num_ciclos,\n    sum([tx IN nodes(path) | tx.paid_total_value][0]) as volume_total\n\nORDER BY num_ciclos DESC\nLIMIT 20;",
+                "origin": "user"
+              },
+              {
+                "query": "// Análise de valores circulares\nMATCH path =\n  (c1:Consumer)\n  ((:Consumer)-[:FROM]->(:Transaction)-[:TO]->(:Consumer)){3,5}\n  (c1)\n\nWITH [tx IN relationships(path) | tx.amount] as valores\n\nRETURN\n    count(*) as total_ciclos,\n    avg(valores[0]) as valor_medio,\n    min(valores[0]) as valor_minimo,\n    max(valores[0]) as valor_maximo,\n    sum(valores[0]) as volume_total;",
+                "origin": "user"
+              },
+              {
+                "query": "// Usuários que mais aparecem em ciclos\nMATCH path =\n  (c1:Consumer)\n  ((:Consumer)-[:FROM]->(:Transaction)-[:TO]->(:Consumer)){3,5}\n  (c1)\n\nRETURN\n    c1.consumer_id as usuario,\n    count(path) as num_ciclos,\n    sum([tx IN relationships(path) | tx.paid_total_value][0]) as volume_total\n\nORDER BY num_ciclos DESC\nLIMIT 20;",
+                "origin": "user"
+              },
+              {
+                "query": "// Usuários que mais aparecem em ciclos\nMATCH path =\n  (c1:Consumer)\n  ((:Consumer)-[:FROM]->(:Transaction)-[:TO]->(:Consumer)){4,5}\n  (c1)\n\nRETURN\n    c1.consumer_id as usuario,\n    count(path) as num_ciclos,\n    sum([tx IN relationships(path) | tx.paid_total_value][0]) as volume_total\n\nORDER BY num_ciclos DESC\nLIMIT 20;",
+                "origin": "user"
+              }
+            ]
+          },
+          "settings": {
+            "type": "table",
+            "query": "// Usuários que mais aparecem em ciclos\nMATCH path = \n  (c1:Consumer)\n  ((:Consumer)-[:FROM]->(t:Transaction)-[:TO]->(:Consumer)){3,5}\n  (c1)\n\nRETURN \n    c1.consumer_id as usuario,\n    count(path) as num_ciclos,\n    sum([tx IN nodes(path) WHERE tx:Transaction | tx.paid_total_value][0]) as volume_total\n\nORDER BY num_ciclos DESC\nLIMIT 20;",
+            "databaseName": "fsi360",
+            "actions": [],
+            "version": 1,
+            "richRenderCells": false,
+            "enableRecordsDownload": true
+          }
+        },
+        {
+          "version": 1,
+          "title": "Pagamentos circulares encontrados",
+          "w": 2,
+          "h": 3,
+          "x": 0,
+          "y": 0,
+          "meta": {
+            "latestCypherQueries": [
+              {
+                "query": "MATCH path =\n  (c1:Consumer)\n  ((:Consumer)-[:FROM]->(t:Transaction)-[:TO]->(:Consumer)){4,5}\n  (c1)\nWHERE head(t).is_pix = true\n  AND all(tx IN t WHERE tx.transaction_date = head(t).transaction_date)\nRETURN count(path);",
+                "origin": "user"
+              },
+              {
+                "query": "MATCH path =\n  (c1:Consumer)\n  ((:Consumer)-[:FROM]->(t:Transaction)-[:TO]->(:Consumer)){5}\n  (c1)\nWHERE head(t).is_pix = true\n  AND all(tx IN t WHERE tx.transaction_date = head(t).transaction_date)\nRETURN count(path);",
+                "origin": "user"
+              },
+              {
+                "query": "MATCH path =\n  (c1:Consumer)\n  ((:Consumer)-[:FROM]->(t:Transaction)-[:TO]->(:Consumer)){5}\n  (c1)\nWHERE head(t).is_pix = true\n  AND all(tx IN t WHERE tx.transaction_date = head(t).transaction_date)\nRETURN path;",
+                "origin": "user"
+              }
+            ]
+          },
+          "settings": {
+            "type": "singleValue",
+            "query": "MATCH path =\n  (c1:Consumer)\n  ((:Consumer)-[:FROM]->(t:Transaction)-[:TO]->(:Consumer)){4,5}\n  (c1)\nWHERE head(t).is_pix = true\n  AND all(tx IN t WHERE tx.transaction_date = head(t).transaction_date)\nRETURN count(path);",
+            "databaseName": "fsi360",
+            "version": 1,
+            "fontSize": 72,
+            "textColor": "#0056ff",
+            "align": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "version": 1,
+      "title": "Timeline de Transações",
+      "widgets": [
+        {
+          "version": 1,
+          "title": "New card",
+          "w": 12,
+          "h": 4,
+          "x": 0,
+          "y": 0,
+          "meta": {
+            "latestCypherQueries": [
+              {
+                "query": "/* Evolução de transações */\n\nMATCH (t:Transaction)\nRETURN t.transaction_date AS x_axis, count(t) AS y_axis\nORDER BY t.transaction_date",
+                "origin": "llm"
+              }
+            ],
+            "latestNaturalLanguagePrompts": [
+              {
+                "query": "Evolução de transações"
+              }
+            ]
+          },
+          "settings": {
+            "type": "line",
+            "query": "/* Evolução de transações */\n\nMATCH (t:Transaction)\nRETURN t.transaction_date AS x_axis, count(t) AS y_axis\nORDER BY t.transaction_date",
+            "databaseName": "fsi360",
+            "valueKeys": [],
+            "orientation": "vertical",
+            "scaleType": "linear",
+            "showLegend": "auto",
+            "showDataZoom": "auto",
+            "version": 1,
+            "enableDownloadImage": true
+          }
+        }
+      ]
+    }
+  ],
+  "params": [
+    {
+      "version": 1,
+      "key": "consumer_consumer_id",
+      "type": "string",
+      "initialValue": "43e94ae2e18c261e"
+    },
+    {
+      "version": 1,
+      "key": "nivel",
+      "type": "number"
+    },
+    {
+      "version": 1,
+      "key": "PesoSimilaridade",
+      "type": "number",
+      "initialValue": 0.4
+    },
+    {
+      "version": 1,
+      "key": "consumer_collusion_component_id"
+    }
+  ]
+}
