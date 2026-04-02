@@ -1,0 +1,17 @@
+pandas
+geopandas
+contextily
+tqdm
+kaggle
+matplotlib
+seaborn
+streamlit
+scipy
+xgboost
+openpyxl
+neo4j
+neo4j-viz
+playwright
+pyvis
+plotly
+python-dotenv
