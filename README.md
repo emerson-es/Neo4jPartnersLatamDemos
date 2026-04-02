@@ -86,4 +86,4 @@ cd Neo4j-Partners-Latam-Demos
 
 Projeto disponibilizado para fins de **demonstração e aprendizado**.
 
-> ⚠️ Software fornecido "como está" (as is), sem garantias de qualquer natureza.
+> ⚠️ Conteúdo fornecido "como está" (as is), sem garantias de qualquer natureza.
